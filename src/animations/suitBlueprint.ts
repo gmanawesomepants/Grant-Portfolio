@@ -349,7 +349,7 @@ export function initBlueprint() {
 
     if (co.side === "left") {
       const rightPct = ((VB_WIDTH - co.end[0]) / VB_WIDTH) * 100;
-      textEl.style.right = `${rightPct + 4}%`;
+      textEl.style.right = `${rightPct + 8}%`;
       textEl.style.textAlign = "right";
     } else {
       const leftPct = (co.end[0] / VB_WIDTH) * 100;
