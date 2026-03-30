@@ -89,7 +89,7 @@ const LAPEL_RIGHT_INNER = `
 // ── Callout definitions — mapped to real suit anatomy, reveal order top→bottom ──
 const CALLOUTS = [
   { anchor: [100, 64], end: [10, 64], text: "TypeScript / Prisma / Node.js", side: "left" },
-  { anchor: [255, 60], end: [390, 60], text: "Kubernetes Deployment", side: "right" },
+  { anchor: [243, 90], end: [390, 90], text: "Kubernetes Deployment", side: "right" },
   { anchor: [280, 160], end: [390, 160], text: "Full CI/CD Pipeline", side: "right" },
   { anchor: [80, 200], end: [10, 200], text: "Thompson Sampling ML Engine", side: "left" },
   { anchor: [280, 290], end: [390, 290], text: "15+ CRM Integrations", side: "right" },
