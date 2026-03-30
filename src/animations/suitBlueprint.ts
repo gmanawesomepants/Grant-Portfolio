@@ -118,6 +118,8 @@ export function initBlueprint() {
   svg.setAttribute("fill", "none");
   svg.setAttribute("stroke-linecap", "round");
   svg.setAttribute("stroke-linejoin", "round");
+  svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", "RevenueOS system architecture diagram rendered as a dinner jacket technical schematic with annotated callouts");
   svg.style.display = "block";
   svg.style.overflow = "visible";
 

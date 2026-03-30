@@ -1048,6 +1048,7 @@ a {
   color: var(--color-text-muted);
   letter-spacing: 0.02em;
   white-space: nowrap;
+  max-width: 38%;
   pointer-events: none;
   transition: filter 0.3s ease, color 0.3s ease;
 }
