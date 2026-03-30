@@ -764,8 +764,15 @@ a {
   box-shadow: 0 4px 20px color-mix(in srgb, var(--color-amber) 6%, transparent);
 }
 
-.case-card:hover::before {
+.case-card:hover::before,
+.case-card:focus-visible::before {
   width: 100%;
+}
+
+.case-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-amber) 6%, transparent);
+  outline: none;
 }
 
 .case-card-number {

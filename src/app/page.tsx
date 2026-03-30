@@ -559,7 +559,7 @@ export default function Home() {
 
         <div className="stagger work-card-stack">
           {/* Card 1 */}
-          <article className="case-card fade-in" aria-label="AI Orchestration Platform for Revenue Teams">
+          <article className="case-card fade-in" tabIndex={0} aria-label="AI Orchestration Platform for Revenue Teams">
             <span className="case-card-number">I/III</span>
             <p className="case-card-category">AI ORCHESTRATION</p>
             <h3 className="case-card-title">
@@ -587,7 +587,7 @@ export default function Home() {
           </article>
 
           {/* Card 2 */}
-          <article className="case-card fade-in" aria-label="Full-Stack AI Infrastructure — Early-Stage Startup">
+          <article className="case-card fade-in" tabIndex={0} aria-label="Full-Stack AI Infrastructure — Early-Stage Startup">
             <span className="case-card-number">II/III</span>
             <p className="case-card-category">FULL-STACK BUILD</p>
             <h3 className="case-card-title">
@@ -615,7 +615,7 @@ export default function Home() {
           </article>
 
           {/* Card 3 */}
-          <article className="case-card fade-in" aria-label="Brand Strategy &amp; Operations System — Premium Consumer Brand">
+          <article className="case-card fade-in" tabIndex={0} aria-label="Brand Strategy &amp; Operations System — Premium Consumer Brand">
             <span className="case-card-number">III/III</span>
             <p className="case-card-category">BRAND &amp; OPERATIONS</p>
             <h3 className="case-card-title">
