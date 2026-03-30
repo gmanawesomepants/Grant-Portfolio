@@ -89,7 +89,7 @@ const LAPEL_RIGHT_INNER = `
 // ── Callout definitions — mapped to real suit anatomy, reveal order top→bottom ──
 const CALLOUTS = [
   { anchor: [100, 64], end: [10, 64], text: "TypeScript / Prisma / Node.js", side: "left" },
-  { anchor: [243, 90], end: [390, 90], text: "Kubernetes Deployment", side: "right" },
+  { anchor: [227, 90], end: [390, 90], text: "Kubernetes Deployment", side: "right" },
   { anchor: [280, 160], end: [390, 160], text: "Full CI/CD Pipeline", side: "right" },
   { anchor: [80, 200], end: [10, 200], text: "Thompson Sampling ML Engine", side: "left" },
   { anchor: [280, 290], end: [390, 290], text: "15+ CRM Integrations", side: "right" },
@@ -347,13 +347,17 @@ export function initBlueprint() {
     textEl.style.top = `${topPct}%`;
     textEl.style.transform = "translateY(-50%)";
 
+    // Fixed pixel gap so all labels have consistent clearance from their endpoint dot,
+    // regardless of label length (percentage offsets over-space short labels like "Redis").
+    const cw = container.offsetWidth;
+    const GAP_PX = 20;
     if (co.side === "left") {
-      const rightPct = ((VB_WIDTH - co.end[0]) / VB_WIDTH) * 100;
-      textEl.style.right = `${rightPct + 8}%`;
+      const endXPx = (co.end[0] / VB_WIDTH) * cw;
+      textEl.style.right = `${cw - endXPx + GAP_PX}px`;
       textEl.style.textAlign = "right";
     } else {
-      const leftPct = (co.end[0] / VB_WIDTH) * 100;
-      textEl.style.left = `${leftPct + 4}%`;
+      const endXPx = (co.end[0] / VB_WIDTH) * cw;
+      textEl.style.left = `${endXPx + GAP_PX}px`;
       textEl.style.textAlign = "left";
     }
 
