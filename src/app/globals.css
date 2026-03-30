@@ -450,26 +450,6 @@ a {
   isolation: isolate;
 }
 
-/* Pinstripe fabric texture */
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 100vw;
-  height: 100%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.025;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 11px,
-    var(--color-text) 11px,
-    var(--color-text) 12px
-  );
-}
 
 /* Cutting Grid */
 .hero-cutting-grid {
@@ -546,12 +526,6 @@ a {
 
 /* ── Load Sequence: Stage-based entrance ── */
 
-/* Stage 1+: grid visible */
-.hero-stage-1 .hero-cutting-grid,
-.hero-stage-2 .hero-cutting-grid,
-.hero-stage-3 .hero-cutting-grid {
-  opacity: 1;
-}
 
 /* Stage 1+: breathing gradient entrance → loop */
 .hero-stage-1 .hero-breathing,
@@ -2017,18 +1991,17 @@ html.theme-blueprint {
 
 /* ── 1. HERO — Pinstripes ── */
 
-.hero::before {
-  content: '';
+.hero-pinstripes {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 1;
   background: repeating-linear-gradient(
     90deg,
     transparent,
-    transparent 19.5px,
-    rgb(255 255 255 / 0.025) 19.5px,
-    rgb(255 255 255 / 0.025) 20px
+    transparent 39px,
+    color-mix(in srgb, var(--color-text) 4%, transparent) 39px,
+    color-mix(in srgb, var(--color-text) 4%, transparent) 40px
   );
 }
 
@@ -2186,7 +2159,7 @@ html.theme-blueprint {
 /* ── Mobile: reduce texture visibility ── */
 
 @media (max-width: 768px) {
-  .hero::before,
+  .hero-pinstripes,
   #work::before,
   #suit-spec::before,
   #services::before,

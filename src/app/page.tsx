@@ -504,7 +504,7 @@ export default function Home() {
 
       {/* ── 1. HERO ── */}
       <section id="top" className={`hero hero-stage-${loadStage}`}>
-        <div className="hero-cutting-grid" aria-hidden="true" />
+        <div className="hero-pinstripes" aria-hidden="true" />
         <HeroVideo />
         <div className="hero-breathing" />
         <ParticleCanvas visible={loadStage >= 2} />
