@@ -94,8 +94,7 @@ const CALLOUTS = [
   { anchor: [80, 200], end: [10, 200], text: "Thompson Sampling ML Engine", side: "left" },
   { anchor: [280, 290], end: [390, 290], text: "15+ CRM Integrations", side: "right" },
   { anchor: [120, 290], end: [10, 290], text: "Redis / BullMQ Processing", side: "left" },
-  { anchor: [308, 382], end: [390, 350], text: "GDPR-Compliant Architecture", side: "right" },
-  { anchor: [300, 390], end: [390, 390], text: "5,300+ Passing Tests", side: "right" },
+  { anchor: [300, 390], end: [390, 390], text: "GDPR-Compliant Architecture", side: "right" },
 ];
 
 export function initBlueprint() {
