@@ -243,7 +243,7 @@ a {
 .tag-enter {
   opacity: 0;
   transform: translateX(-12px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-block;
   position: relative;
   border-left: none;
@@ -258,7 +258,7 @@ a {
   width: 1px;
   height: 0;
   background: var(--color-amber-dim);
-  transition: height 0.35s ease 0.15s;
+  transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
 }
 
 .tag-enter::before {
@@ -301,11 +301,13 @@ a {
 
 .closer-fade {
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transform: translateY(4px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .closer-fade.visible {
   opacity: 1;
+  transform: translateY(0);
 }
 
 /* ── Hero Entrance Sequence ── */

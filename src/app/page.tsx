@@ -24,7 +24,7 @@ const TICKER_TEXT =
 /* ── Helpers ── */
 
 function MetricDot() {
-  return <span className="metric-dot">&middot;</span>;
+  return <span className="metric-dot" aria-hidden="true">&middot;</span>;
 }
 
 function RulerMarks() {
