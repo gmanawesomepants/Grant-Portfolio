@@ -338,37 +338,38 @@ export function initBlueprint() {
     svg.appendChild(group);
 
     // Text label (HTML, positioned absolutely)
+    // top/left are set after SVG is in the DOM via getBoundingClientRect pass below.
     const textEl = document.createElement("div");
     textEl.className = "callout-label";
     textEl.textContent = co.text;
     textEl.style.opacity = "0";
-
-    // All positioning uses `left` from the same origin (container left edge).
-    // Left-side labels use translateX(-100%) so the element's right edge sits
-    // exactly GAP_PX to the left of the endpoint dot — no `right:` arithmetic
-    // needed, which avoids browser inconsistencies with out-of-bounds right values.
-    const scale = container.offsetWidth / VB_WIDTH;
-    const GAP_PX = 20;
-    const endXPx = co.end[0] * scale;
-    const endYPx = co.end[1] * scale;
-
-    textEl.style.top = `${endYPx}px`;
-
-    if (co.side === "left") {
-      textEl.style.left = `${endXPx - GAP_PX}px`;
-      textEl.style.transform = "translateX(-100%) translateY(-50%)";
-      textEl.style.textAlign = "right";
-    } else {
-      textEl.style.left = `${endXPx + GAP_PX}px`;
-      textEl.style.transform = "translateY(-50%)";
-      textEl.style.textAlign = "left";
-    }
+    textEl.style.textAlign = co.side === "left" ? "right" : "left";
+    textEl.style.transform = co.side === "left"
+      ? "translateX(-100%) translateY(-50%)"
+      : "translateY(-50%)";
 
     container.appendChild(textEl);
     calloutElements.push({ group, line, anchorDot, endDot, hitarea, textEl });
   });
 
   container.prepend(svg);
+
+  // ── Position labels from actual SVG dot coordinates ──
+  // getBoundingClientRect forces a synchronous reflow and returns the dot's
+  // true rendered pixel position — no coordinate system conversion needed.
+  {
+    const GAP_PX = 20;
+    const cRect = container.getBoundingClientRect();
+    calloutElements.forEach((el, i) => {
+      const dot = el.endDot.getBoundingClientRect();
+      const dotX = dot.left + dot.width / 2 - cRect.left;
+      const dotY = dot.top + dot.height / 2 - cRect.top;
+      el.textEl.style.top = `${dotY}px`;
+      el.textEl.style.left = CALLOUTS[i].side === "left"
+        ? `${dotX - GAP_PX}px`
+        : `${dotX + GAP_PX}px`;
+    });
+  }
 
   // ── Set up stroke-dash for outline paths ──
 
