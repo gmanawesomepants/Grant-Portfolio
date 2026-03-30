@@ -294,15 +294,14 @@ a {
 }
 
 .stagger > .fade-in:nth-child(1) { transition-delay: 0ms; }
-.stagger > .fade-in:nth-child(2) { transition-delay: 130ms; }
-.stagger > .fade-in:nth-child(3) { transition-delay: 260ms; }
+.stagger > .fade-in:nth-child(2) { transition-delay: 80ms; }
+.stagger > .fade-in:nth-child(3) { transition-delay: 160ms; }
 
 /* ── Animation: Closer Fade (Tier 4) ── */
 
 .closer-fade {
   opacity: 0;
   transition: opacity 0.6s ease;
-  transition-delay: 0.2s;
 }
 
 .closer-fade.visible {
@@ -735,7 +734,7 @@ a {
 .work-card-stack {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0;
   margin-top: 2rem;
 }
 

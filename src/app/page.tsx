@@ -51,11 +51,21 @@ function SectionDivider() {
 
 function useScrollReveal() {
   useEffect(() => {
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
+            // Fire any .closer-fade child relative to card entry, not its own
+            // viewport position — prevents closers from staying invisible on
+            // short viewports where the card bottom never crosses the threshold.
+            const closer = entry.target.querySelector<HTMLElement>(".closer-fade");
+            if (closer) {
+              const id = setTimeout(() => closer.classList.add("visible"), 400);
+              timeouts.push(id);
+            }
           }
         });
       },
@@ -63,11 +73,14 @@ function useScrollReveal() {
     );
 
     const targets = document.querySelectorAll(
-      ".clip-reveal, .tag-enter, .fade-in, .closer-fade"
+      ".clip-reveal, .tag-enter, .fade-in"
     );
     targets.forEach((el) => observer.observe(el));
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      timeouts.forEach(clearTimeout);
+    };
   }, []);
 }
 
