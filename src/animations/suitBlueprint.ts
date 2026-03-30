@@ -343,21 +343,20 @@ export function initBlueprint() {
     textEl.textContent = co.text;
     textEl.style.opacity = "0";
 
-    const topPct = (co.end[1] / VB_HEIGHT) * 100;
-    textEl.style.top = `${topPct}%`;
+    // Single scale factor maps SVG units → rendered pixels.
+    // Using it for both axes ensures x and y stay in the same coordinate space
+    // regardless of how the browser resolves the container height.
+    const scale = container.offsetWidth / VB_WIDTH;
+    const GAP_PX = 20;
+
+    textEl.style.top = `${co.end[1] * scale}px`;
     textEl.style.transform = "translateY(-50%)";
 
-    // Fixed pixel gap so all labels have consistent clearance from their endpoint dot,
-    // regardless of label length (percentage offsets over-space short labels like "Redis").
-    const cw = container.offsetWidth;
-    const GAP_PX = 20;
     if (co.side === "left") {
-      const endXPx = (co.end[0] / VB_WIDTH) * cw;
-      textEl.style.right = `${cw - endXPx + GAP_PX}px`;
+      textEl.style.right = `${container.offsetWidth - co.end[0] * scale + GAP_PX}px`;
       textEl.style.textAlign = "right";
     } else {
-      const endXPx = (co.end[0] / VB_WIDTH) * cw;
-      textEl.style.left = `${endXPx + GAP_PX}px`;
+      textEl.style.left = `${co.end[0] * scale + GAP_PX}px`;
       textEl.style.textAlign = "left";
     }
 
