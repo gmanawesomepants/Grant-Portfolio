@@ -173,8 +173,6 @@ a {
     var(--color-divider) 80%,
     transparent
   );
-  max-width: 1100px;
-  margin: 0 auto;
 }
 
 .section-divider::after {
@@ -302,7 +300,7 @@ a {
 .closer-fade {
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .closer-fade.visible {
@@ -390,7 +388,7 @@ a {
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-  margin-top: 1rem;
+  margin-top: 1.75rem;
 }
 
 /* ── CTA Button (Premium Hover) ── */
