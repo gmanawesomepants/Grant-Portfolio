@@ -544,9 +544,9 @@ export default function Home() {
         <div className="garment-tag tag-enter">THE PATTERN BOOK</div>
         <h2 className="section-heading clip-reveal">Systems I&apos;ve Built</h2>
 
-        <div className="stagger" style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginTop: "2rem" }}>
+        <div className="stagger work-card-stack">
           {/* Card 1 */}
-          <div className="case-card fade-in">
+          <article className="case-card fade-in" aria-label="AI Orchestration Platform for Revenue Teams">
             <span className="case-card-number">I/III</span>
             <p className="case-card-category">AI ORCHESTRATION</p>
             <h3 className="case-card-title">
@@ -571,10 +571,10 @@ export default function Home() {
             <p className="case-card-closer closer-fade">
               Enterprise-grade system. One engineer. Currently in production.
             </p>
-          </div>
+          </article>
 
           {/* Card 2 */}
-          <div className="case-card fade-in">
+          <article className="case-card fade-in" aria-label="Full-Stack AI Infrastructure — Early-Stage Startup">
             <span className="case-card-number">II/III</span>
             <p className="case-card-category">FULL-STACK BUILD</p>
             <h3 className="case-card-title">
@@ -599,10 +599,10 @@ export default function Home() {
               Zero to production. Solo engineer. Every layer — backend, frontend,
               AI, design, DevOps.
             </p>
-          </div>
+          </article>
 
           {/* Card 3 */}
-          <div className="case-card fade-in">
+          <article className="case-card fade-in" aria-label="Brand Strategy &amp; Operations System — Premium Consumer Brand">
             <span className="case-card-number">III/III</span>
             <p className="case-card-category">BRAND &amp; OPERATIONS</p>
             <h3 className="case-card-title">
@@ -626,7 +626,7 @@ export default function Home() {
               Not just strategy decks. Operational systems designed to ship
               product.
             </p>
-          </div>
+          </article>
         </div>
       </section>
 
