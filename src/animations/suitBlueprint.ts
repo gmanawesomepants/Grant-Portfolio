@@ -91,7 +91,7 @@ const CALLOUTS = [
   { anchor: [100, 64], end: [10, 64], text: "TypeScript / Prisma / Node.js", side: "left" },
   { anchor: [227, 90], end: [390, 90], text: "Kubernetes Deployment", side: "right" },
   { anchor: [280, 160], end: [390, 160], text: "Full CI/CD Pipeline", side: "right" },
-  { anchor: [80, 200], end: [10, 200], text: "Thompson Sampling ML Engine", side: "left" },
+  { anchor: [200, 242], end: [10, 242], text: "Thompson Sampling ML Engine", side: "left" },
   { anchor: [280, 290], end: [390, 290], text: "15+ CRM Integrations", side: "right" },
   { anchor: [120, 290], end: [10, 290], text: "Redis / BullMQ Processing", side: "left" },
   { anchor: [300, 390], end: [390, 390], text: "GDPR-Compliant Architecture", side: "right" },
@@ -358,19 +358,15 @@ export function initBlueprint() {
   // true rendered pixel position — no coordinate system conversion needed.
   {
     const GAP_PX = 20;
-    // Thompson's line is shorter (70 SVG units vs 90–110 for others), so its
-    // anchor dot sits closer to the endpoint — the label needs extra clearance.
-    const THOMPSON_GAP = 38;
     const cRect = container.getBoundingClientRect();
     calloutElements.forEach((el, i) => {
       const dot = el.endDot.getBoundingClientRect();
       const dotX = dot.left + dot.width / 2 - cRect.left;
       const dotY = dot.top + dot.height / 2 - cRect.top;
-      const gap = CALLOUTS[i].text === "Thompson Sampling ML Engine" ? THOMPSON_GAP : GAP_PX;
       el.textEl.style.top = `${dotY}px`;
       el.textEl.style.left = CALLOUTS[i].side === "left"
-        ? `${dotX - gap}px`
-        : `${dotX + gap}px`;
+        ? `${dotX - GAP_PX}px`
+        : `${dotX + GAP_PX}px`;
     });
   }
 
