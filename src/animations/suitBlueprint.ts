@@ -343,20 +343,24 @@ export function initBlueprint() {
     textEl.textContent = co.text;
     textEl.style.opacity = "0";
 
-    // Single scale factor maps SVG units → rendered pixels.
-    // Using it for both axes ensures x and y stay in the same coordinate space
-    // regardless of how the browser resolves the container height.
+    // All positioning uses `left` from the same origin (container left edge).
+    // Left-side labels use translateX(-100%) so the element's right edge sits
+    // exactly GAP_PX to the left of the endpoint dot — no `right:` arithmetic
+    // needed, which avoids browser inconsistencies with out-of-bounds right values.
     const scale = container.offsetWidth / VB_WIDTH;
     const GAP_PX = 20;
+    const endXPx = co.end[0] * scale;
+    const endYPx = co.end[1] * scale;
 
-    textEl.style.top = `${co.end[1] * scale}px`;
-    textEl.style.transform = "translateY(-50%)";
+    textEl.style.top = `${endYPx}px`;
 
     if (co.side === "left") {
-      textEl.style.right = `${container.offsetWidth - co.end[0] * scale + GAP_PX}px`;
+      textEl.style.left = `${endXPx - GAP_PX}px`;
+      textEl.style.transform = "translateX(-100%) translateY(-50%)";
       textEl.style.textAlign = "right";
     } else {
-      textEl.style.left = `${co.end[0] * scale + GAP_PX}px`;
+      textEl.style.left = `${endXPx + GAP_PX}px`;
+      textEl.style.transform = "translateY(-50%)";
       textEl.style.textAlign = "left";
     }
 
