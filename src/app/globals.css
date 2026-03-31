@@ -867,6 +867,10 @@ a {
   100% { transform: translateX(-50%); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+}
+
 /* ── Services ── */
 
 .services-grid {

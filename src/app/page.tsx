@@ -678,7 +678,7 @@ export default function Home() {
       </section>
 
       {/* ── 4. TICKER ── */}
-      <div className="ticker-section">
+      <div className="ticker-section" aria-hidden="true">
         <div className="ticker-track">
           <span className="ticker-content">{TICKER_TEXT}&nbsp;&nbsp;·&nbsp;&nbsp;</span>
           <span className="ticker-content">{TICKER_TEXT}&nbsp;&nbsp;·&nbsp;&nbsp;</span>
