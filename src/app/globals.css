@@ -345,7 +345,7 @@ a {
   transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: 380ms;
 }
-.hero-anim-dash.entered { width: 40px; }
+.hero-anim-dash.entered { width: clamp(220px, 50%, 380px); }
 
 .hero-anim-mantra-1,
 .hero-anim-mantra-2,
@@ -588,10 +588,29 @@ a {
 }
 
 .hero-dash {
-  height: 1px;
-  background: var(--color-amber);
-  opacity: 0.5;
+  position: relative;
+  height: 11px;
+  width: clamp(220px, 50%, 380px);
   margin: 1.25rem auto;
+  background: linear-gradient(
+    180deg,
+    transparent calc(50% - 0.5px),
+    var(--color-amber) calc(50% - 0.5px),
+    var(--color-amber) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+  opacity: 0.55;
+}
+
+.hero-dash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 23px, var(--color-amber) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 11px, color-mix(in srgb, var(--color-amber) 50%, transparent) 11px 12px);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
 }
 
 .hero-mantra {
@@ -601,6 +620,21 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--color-text-faint);
+}
+
+.hero-mantra {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  justify-content: center;
+}
+
+.hero-mantra > span + span::before {
+  content: '·';
+  color: var(--color-amber);
+  opacity: 0.7;
+  margin-right: 0.7rem;
+  display: inline-block;
 }
 
 .hero .cta-button {
