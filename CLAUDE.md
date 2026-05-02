@@ -14,7 +14,7 @@ This is a portfolio site for Grant Mahn — self-taught software engineer, forme
 
 - **Framework:** Next.js 16.1, React 19, TypeScript
 - **Styling:** Tailwind CSS v4 (CSS-first config, `@theme` block for tokens)
-- **Animation:** GSAP 3.14 + ScrollTrigger (thread, suit blueprint, stitch counter ONLY). All other animations are CSS transitions + IntersectionObserver.
+- **Animation:** GSAP 3.14 + ScrollTrigger (thread, suit blueprint, stitch counter, services unfold ONLY). All other animations are CSS transitions + IntersectionObserver.
 - **Fonts:** Syne (headings, 400-800) + Outfit (body, 300-600) via next/font/google
 - **Email:** Mailgun via native fetch + FormData (not SDK)
 - **Deploy:** Vercel
@@ -66,7 +66,7 @@ Amber = the thread, the brass of a measuring tape, the gold stitching on a bespo
 2. WORK              — "The Pattern Book", three case study cards
 3. SUIT SPEC SHEET   — standalone SVG blueprint, draws on scroll
 4. TICKER            — full-width scrolling credential tape
-5. SERVICES          — three columns, tailoring vocabulary
+5. SERVICES          — unfolding pattern piece, scroll-driven reveal
 6. ABOUT             — text + photo, THE REVEAL ("Former tailor. Same discipline, different material.")
 7. FITTING ROOM      — AI-powered interactive form
 8. CONTACT           — "Request a Fitting" intake form with Mailgun
@@ -141,6 +141,7 @@ src/
   animations/
     thread.ts          — Thread SVG + ScrollTrigger + junction labels
     suitBlueprint.ts   — Suit SVG drawing + callout animations
+    servicesUnfold.ts  — Services panel unfold + ScrollTrigger pinning
     stitchCounter.ts   — Scroll-linked counter logic
 public/
   portrait.jpg         — User photo

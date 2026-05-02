@@ -2,6 +2,7 @@
 name: evaluate-design
 description: "Evaluate a section of grantmahn.com against its spec with a cold, skeptical design review. Runs in a forked context with no memory of the build session. Use when the user types /evaluate-design [section-name] or asks to evaluate, review, or grade a section."
 context: fork
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Evaluate Design

@@ -2,6 +2,7 @@
 name: qa-check
 description: "Run a technical QA check on a section of grantmahn.com. Checks build, lint, responsive, accessibility, performance, and spec compliance. Use when the user types /qa-check [section-name] or asks for a technical check or QA pass."
 context: fork
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # QA Check

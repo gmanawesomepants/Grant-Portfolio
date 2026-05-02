@@ -91,7 +91,7 @@ const CALLOUTS = [
   { anchor: [100, 64], end: [10, 64], text: "TypeScript / Prisma / Node.js", side: "left", gap: 20 },
   { anchor: [227, 90], end: [390, 90], text: "Kubernetes Deployment", side: "right", gap: 20 },
   { anchor: [280, 160], end: [390, 160], text: "Full CI/CD Pipeline", side: "right", gap: 20 },
-  { anchor: [200, 242], end: [-30, 242], text: "Thompson Sampling ML Engine", side: "left", gap: 44 },
+  { anchor: [200, 242], end: [10, 242], text: "Thompson Sampling ML Engine", side: "left", gap: 44 },
   { anchor: [280, 290], end: [390, 290], text: "15+ CRM Integrations", side: "right", gap: 20 },
   { anchor: [120, 290], end: [10, 290], text: "Redis / BullMQ Processing", side: "left", gap: 20 },
   { anchor: [300, 390], end: [390, 390], text: "GDPR-Compliant Architecture", side: "right", gap: 20 },
