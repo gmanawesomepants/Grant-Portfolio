@@ -1,17 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #080808;
-  --color-bg-elevated: #111111;
-  --color-amber: #C4943D;
-  --color-amber-light: #D4A96A;
-  --color-amber-glow: #C4943D50;
-  --color-amber-dim: #C4943D15;
-  --color-amber-trace: #C4943D08;
-  --color-text: #ECECEC;
-  --color-text-muted: #ECECEC90;
-  --color-text-faint: #ECECEC45;
-  --color-divider: #ECECEC12;
+  /* ── Surfaces — warm-near-black, brass undertone (was pure #080808) ── */
+  --color-bg: #0E0A06;
+  --color-bg-elevated: #15100A;
+
+  /* ── Brass family — warmer/lighter shift (was #C4943D, slightly cool) ── */
+  --color-amber: #D4A24C;
+  --color-amber-light: #E5BB75;
+  --color-amber-glow: #D4A24C50;
+  --color-amber-dim: #D4A24C15;
+  --color-amber-trace: #D4A24C08;
+
+  /* ── Text — bone, warm chalk (was pure #ECECEC) ── */
+  --color-text: #F0E8DA;
+  --color-text-muted: #F0E8DA90;
+  --color-text-faint: #F0E8DA45;
+  --color-divider: #F0E8DA12;
+
+  /* ── New: state accent + paper alias (additive, nothing breaks) ── */
+  --color-mahogany: #6B2E2A;
+  --color-paper: #F0E8DA;
+
   --font-heading: "Syne", sans-serif;
   --font-body: "Outfit", sans-serif;
 }
@@ -2089,6 +2099,10 @@ html.theme-blueprint {
   --color-amber-glow: #3B9ECC50;
   --color-amber-dim: #3B9ECC15;
   --color-amber-trace: #3B9ECC08;
+  --color-text: #E8EEF4;
+  --color-text-muted: #E8EEF490;
+  --color-text-faint: #E8EEF445;
+  --color-divider: #E8EEF412;
 }
 
 /* ── Reduced Motion ── */
