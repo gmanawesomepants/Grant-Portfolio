@@ -370,8 +370,11 @@ function Nav() {
 
   return (
     <nav className={`nav ${visible ? "visible" : ""}`}>
-      <a href="#top" className="nav-logo">
-        {CONFIG.name} {CONFIG.lastName}
+      <a href="#top" className="nav-logo" aria-label={`${CONFIG.name} ${CONFIG.lastName} home`}>
+        <span className="nav-monogram" aria-hidden="true">
+          <span className="nav-monogram-gm">G<span className="nav-monogram-m">M</span></span>
+        </span>
+        <span className="nav-logo-text">{CONFIG.name} {CONFIG.lastName}</span>
       </a>
       <ul className="nav-links">
         <li><a href="#work" className="nav-link">Pattern Book</a></li>

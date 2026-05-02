@@ -700,10 +700,51 @@ a {
 }
 
 .nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 0.95rem;
   color: var(--color-text);
+}
+
+.nav-monogram {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  position: relative;
+  border: 1px solid var(--color-amber-dim);
+  background: var(--color-amber-trace);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.nav-monogram::before,
+.nav-monogram::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--color-amber-dim) 0 2px, transparent 2px 4px);
+}
+
+.nav-monogram::before { top: 0; }
+.nav-monogram::after { bottom: 0; }
+
+.nav-monogram-gm {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.nav-monogram-m {
+  color: var(--color-amber);
 }
 
 .nav-links {
