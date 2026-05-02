@@ -21,23 +21,30 @@
 ## Design Direction
 
 **Fabric Texture:** Pinstripes — repeating-linear-gradient, vertical, 0.025 opacity
+
 **Background Layers (back to front):** Cutting grid (CSS, 1.5%) → Video (if exists, 20%) → Breathing gradient (800px radial, amber ~5%, 8s animation) → Particle field (canvas, 40-55 amber dots) → Content
 
 **Animations:**
-- Content entrance: staggered fade-in (12px Y translate), cubic-bezier(0.16, 1, 0.3, 1), 0.6-0.7s duration
-- Name: first, no delay
-- "SYSTEMS TAILOR": delay 80ms
-- Tagline: delay 180ms
-- Dash: delay 280ms
-- "Measured. Cut. Deployed.": delay 380ms — 480ms (three words, stagger between them)
-- CTA: delay 580ms
-- Clock: fade in last, very subtle
+- Name: clip-path curtain reveal (inset bottom-to-top), 0.6s, cubic-bezier(0.16, 1, 0.3, 1), no delay
+- "SYSTEMS TAILOR": opacity fade, 0.5s, delay 150ms
+- Tagline: opacity fade, 0.5s, delay 280ms
+- Dash: width grow (0 → 40px), 0.5s, delay 380ms
+- "Measured." — opacity fade, 0.5s, delay 380ms
+- "Cut." — opacity fade, 0.5s, delay 480ms
+- "Deployed." — opacity fade, 0.5s, delay 580ms
+- CTA: opacity + translateY(12px → 0), 0.5s, delay 680ms
+- Clock: opacity fade to 0.4, 0.5s ease with 0.6s delay, tied to load stage 3
+- Scroll indicator: fade in on load stage 3, then subtle pulse (opacity 0.4 → 0.7 → 0.4, 2.5s cycle, infinite)
+- Scroll indicator: `display: none` on mobile (max-width: 768px) — not opacity, kill it completely
+- Breathing gradient: entrance fade 0.8s, then 8s infinite breathe (scale 1→1.2, opacity 1→0.5)
+- Load sequence: 3 stages controlled by `hero-stage-N` class on the section element
 
 **Typography:**
 - Name: Syne 800, clamp(3.2rem, 8vw, 6.5rem), line-height 1.05, letter-spacing -0.04em
 - Role: Outfit 500, 0.75rem, letter-spacing 0.25em, uppercase, amber
-- Tagline: Outfit 300, muted text
-- Signature: Outfit 500, 0.7rem, text-faint, uppercase
+- Tagline: Outfit 300, clamp(0.95rem, 1.6vw, 1.2rem), muted text
+- Signature: Outfit 500, 0.7rem, letter-spacing 0.15em, text-faint, uppercase
+- Clock: Outfit, 0.65rem, text-faint, opacity 0.4 when visible
 
 ## Success Criteria
 
@@ -46,11 +53,14 @@
 3. The breathing gradient is visible but doesn't pull focus from text
 4. Particles react to cursor movement (desktop only)
 5. The pinstripe texture is visible in the margins but invisible behind the name
-6. The clock updates every second and shows San Diego time
-7. "Measured. Cut. Deployed." plants the tailoring seed without being obvious
-8. The scroll hint pulses at the bottom and disappears on mobile
-9. Total entrance animation completes in under 1 second — feels brisk, not slow
-10. The section passes the AI Slop Test
+6. The clock updates every second and shows San Diego time (America/Los_Angeles)
+7. "Measured." "Cut." "Deployed." land as three separate beats (three spans, 100ms stagger) — rhythm, not a sentence
+8. The scroll indicator appears on desktop and is hidden on mobile (max-width: 768px)
+9. Total entrance animation completes briskly — last element (CTA) enters at 680ms + 0.5s = ~1.18s, still reads as brisk with the word stagger
+10. The section passes the AI Slop Test — specifically: the clip-path name reveal is NOT a generic fade-up
+11. The load sequence has 3 distinct stages: (1) grid + breathing, (2) particles, (3) scroll indicator + clock
+12. prefers-reduced-motion disables all animations, shows all content immediately, hides breathing gradient and particles
+13. HeroVideo gracefully handles missing video files (display: none fallback)
 
 ## Anti-Patterns
 
@@ -59,17 +69,27 @@
 3. Do NOT add a subtitle explaining the tailoring metaphor — the reveal comes in Section 6 (About)
 4. Do NOT use a gradient text effect on the name — that's a 2023 trend, not this brand
 5. Do NOT add social icons to the hero — they belong in the footer only
+6. Do NOT use generic fade-up (translateY + opacity) for the name — the clip-path reveal is the deliberate choice
+7. Do NOT make the scroll indicator flashy or oversized — it's a whisper, not a shout
 
 ## Do Not Touch
 
-- The particle canvas implementation (if already built)
+- The particle canvas implementation and its cursor-reactivity math
 - The GSAP thread system (lives in separate animation file)
 - The CONFIG object structure in page.tsx
 - The custom cursor implementation
+- The HeroVideo component and its deferred-load pattern
+- The load-stage sequencing logic (stages 1-3)
 
 ## Dependencies
 
 - CSS custom properties from globals.css (@theme block)
 - Syne + Outfit via next/font/google (defined in layout.tsx)
-- IntersectionObserver for scroll-triggered content entrance
+- Load-stage state management in the page component
 - requestAnimationFrame for clock and particle canvas
+
+## Resolved Decisions
+
+1. **Scroll indicator pulse** — YES. Subtle opacity oscillation (0.4 → 0.7 → 0.4, ~2.5s cycle). Ambient life, not attention-grabbing.
+2. **Scroll indicator on mobile** — `display: none` at 768px. Not opacity. Kill it completely.
+3. **Mantra word stagger** — YES. Three spans, 100ms intervals (380/480/580ms). Three hammer strikes, not a sentence dump. CTA shifts to 680ms delay.
