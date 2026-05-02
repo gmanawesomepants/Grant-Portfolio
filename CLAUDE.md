@@ -26,17 +26,19 @@ This is a portfolio site for Grant Mahn — self-taught software engineer, forme
 ## Color System
 
 ```
---color-bg:           #080808    (near-black — dark workshop, late at night)
---color-elevated:     #111111    (elevated surfaces)
---color-amber:        #C4943D    (warm gold — thread, brass, gold stitching)
---color-amber-light:  #D4A96A    (closers, highlights)
---color-amber-glow:   #C4943D50  (hover glows)
---color-amber-dim:    #C4943D15  (subtle borders)
---color-amber-trace:  #C4943D08  (barely-visible lines)
---color-text:         #ECECEC    (chalk on dark fabric)
---color-text-muted:   #ECECEC90
---color-text-faint:   #ECECEC45
---color-divider:      #ECECEC12
+--color-bg:           #0E0A06    (warm-near-black — workshop with brass undertone)
+--color-bg-elevated:  #15100A    (elevated surfaces)
+--color-amber:        #D4A24C    (brass — thread, measuring tape, gold stitching)
+--color-amber-light:  #E5BB75    (closers, highlights)
+--color-amber-glow:   #D4A24C50  (hover glows)
+--color-amber-dim:    #D4A24C15  (subtle borders)
+--color-amber-trace:  #D4A24C08  (barely-visible lines)
+--color-text:         #F0E8DA    (bone — warm chalk on dark fabric)
+--color-text-muted:   #F0E8DA90
+--color-text-faint:   #F0E8DA45
+--color-divider:      #F0E8DA12
+--color-mahogany:     #6B2E2A    (state accent — focus, error, hover punctuation)
+--color-paper:        #F0E8DA    (alias of --color-text for semantic clarity)
 ```
 
 Amber = the thread, the brass of a measuring tape, the gold stitching on a bespoke lining. Used SPARINGLY — like hand-stitching on a suit. Everywhere else: monochrome.
@@ -171,7 +173,7 @@ These elements are locked. Do not modify without explicit approval:
 - The suit jacket SVG structure and its 3 animation groups
 - The needle-and-thread "t" logo in Italianno script
 - The Syne + Outfit font pairing
-- The dark/amber color relationship and token values
+- The wool/brass color relationship and token values (palette migrated 2026 — see Color System section)
 - The GSAP import and initialization patterns
 - The fabric texture CSS patterns and their section assignments
 - The Mailgun API route logic and form state management
@@ -211,3 +213,9 @@ npm run lint         # ESLint
 - NOT a Framer template with generic fade-ups
 - NOT a resume with education and timeline sections
 - NOT half-committed to its theme. Every element is tailoring. Every detail is precision.
+
+---
+
+## Migration Log
+
+**2026 — Wool & Brass palette shift.** Original palette was pure-black (#080808) + cool-amber (#C4943D) + pure-chalk (#ECECEC). Migrated to warm-near-black (#0E0A06) + brass (#D4A24C) + bone (#F0E8DA) for warmer, more tailored feel. Plus added --color-mahogany for state accents and pill-shaped CTAs. See git history for `phase 1` through `phase 5` commits.
