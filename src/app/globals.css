@@ -419,6 +419,8 @@ a {
   background: transparent;
   cursor: pointer;
   text-decoration: none;
+  border-radius: 999px;
+  white-space: nowrap;
   transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1;
@@ -1371,7 +1373,7 @@ a {
   transition: border-color 0.3s ease;
   -webkit-appearance: none;
   appearance: none;
-  border-radius: 0;
+  border-radius: 3px;
 }
 
 .fitting-input::placeholder {
