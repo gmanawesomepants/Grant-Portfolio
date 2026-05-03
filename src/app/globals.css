@@ -233,6 +233,26 @@ a {
   .ruler-marks {
     display: none;
   }
+
+  /* ── Hero tape-rule — tighten on small screens ── */
+  .hero-dash {
+    width: min(72%, 280px);
+  }
+
+  .hero-anim-dash.entered {
+    width: min(72%, 280px);
+  }
+
+  /* ── Hero mantra — allow wrap if interpuncts make it too long ── */
+  .hero-mantra {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .hero-mantra > span + span::before {
+    margin-right: 0.4rem;
+  }
 }
 
 /* ── Animation: Clip-Path Reveal (Tier 1) ── */
@@ -2199,12 +2219,14 @@ a {
     display: none;
   }
 
+  /* Show stitch-track on mobile — extend to full form height */
   .stitch-track {
-    display: none;
+    display: block;
+    bottom: 0;
   }
 
   .contact-form {
-    padding-left: 0;
+    padding-left: 1.5rem;
   }
 
   .contact-step {
@@ -2217,6 +2239,12 @@ a {
     margin-bottom: 0.25rem;
   }
 
+  /* Recalibrate dots to align with each step's label row on mobile */
+  .stitch-dot:nth-child(2) { top: 2.4rem; }
+  .stitch-dot:nth-child(3) { top: 10rem; }
+  .stitch-dot:nth-child(4) { top: 17.6rem; }
+  .stitch-dot:nth-child(5) { top: 27.5rem; }
+
   .contact-submit {
     align-self: stretch;
     margin-left: 0;
@@ -2225,6 +2253,19 @@ a {
 
   .contact-error {
     padding-left: 0;
+  }
+
+  /* ── CTA pills — tighter padding on mobile ── */
+  .cta-button {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.78rem;
+  }
+
+  /* ── Inputs fill container width + iOS auto-zoom prevention ── */
+  .fitting-input,
+  .fitting-select {
+    width: 100%;
+    font-size: 16px;
   }
 }
 
@@ -2305,6 +2346,33 @@ a {
 @media (max-width: 768px) {
   .hero-name {
     font-size: 2.8rem;
+  }
+
+  /* ── Skip fade-in animations on mobile — show content immediately ── */
+  /* IntersectionObserver is unreliable at mobile viewport heights; */
+  /* elements stay opacity:0 rather than fading in. */
+  .fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: none;
+  }
+
+  /* ── Reveal GSAP-animated elements that stay opacity:0 without desktop ScrollTrigger ── */
+  .suit-spec-closer {
+    opacity: 1;
+  }
+
+  /* ── Center heading-tier text on mobile ── */
+  .garment-tag {
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+  }
+
+  .section-heading,
+  .contact-heading,
+  .contact-sub {
+    text-align: center;
   }
 
   .section-wrapper {
@@ -2399,15 +2467,101 @@ a {
   }
 
   .nav {
-    padding: 0.75rem 1rem;
+    padding: 0.7rem 1rem;
+  }
+
+  /* Hide wordmark on mobile — monogram alone carries the mark */
+  .nav-logo-text {
+    display: none;
+  }
+
+  /* 5 links don't fit at 375px — hide "Get Fitted" (hero CTA covers it) */
+  .nav-links li:nth-child(4) {
+    display: none;
   }
 
   .nav-links {
-    gap: 1rem;
+    gap: 1.1rem;
   }
 
   .nav-link {
     font-size: 0.7rem;
+  }
+
+  /* ── Fitting Room eyebrow + tape-rule ── */
+  .fitting-eyebrow {
+    font-size: 0.62rem;
+    flex-wrap: wrap;
+  }
+
+  .fitting-tape-rule {
+    min-width: 60px;
+    height: 7px;
+  }
+
+  /* ── Report heading: scale down on small screens ── */
+  .fitting-report-heading {
+    font-size: 1.2rem;
+  }
+
+  .fitting-report-step {
+    font-size: 0.62rem;
+  }
+
+  .fitting-report-stamp {
+    font-size: 0.58rem;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  /* ── Report card: tighter padding ── */
+  .fitting-report {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .fitting-report-tag {
+    font-size: 0.55rem;
+    top: 0.7rem;
+    right: 0.7rem;
+  }
+
+  /* ── Blueprint layers: collapse to single column ── */
+  .fitting-blueprint-layer {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    row-gap: 0.25rem;
+  }
+
+  .fitting-blueprint-layer-num {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .fitting-blueprint-layer-name {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .fitting-blueprint-layer-detail {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  /* ── Submit + report CTAs ── */
+  .fitting-submit {
+    align-self: stretch;
+    width: 100%;
+  }
+
+  .fitting-report-cta {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* ── Copy spec / new fitting buttons stack ── */
+  .fitting-report-actions {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
 }
