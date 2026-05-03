@@ -649,13 +649,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 3. SUIT SPEC SHEET ── */}
+      {/* ── 3. THE GARMENT (suit spec sheet) ── */}
       <SectionDivider />
       <section id="suit-spec" className="section-wrapper suit-spec">
-        <div className="garment-tag tag-enter">REVENUEOS · PATTERN I/III</div>
-        <h2 className="section-heading clip-reveal">System Blueprint</h2>
+        {/* Document header strip — top edge, full bleed within section */}
+        <div className="garment-doc-header" aria-hidden="true">
+          <span className="garment-doc-style">STYLE №2026-04</span>
+          <span className="garment-doc-sep">·</span>
+          <span className="garment-doc-name">DINNER JACKET</span>
+          <span className="garment-doc-sep">·</span>
+          <span className="garment-doc-house">GRANT MAHN ATELIER</span>
+        </div>
 
-        {/* Desktop: SVG blueprint drawn by GSAP */}
+        {/* Faint folded-paper crease behind the suit */}
+        <div className="garment-doc-crease" aria-hidden="true" />
+
+        <div className="garment-tag tag-enter">REVENUEOS · PATTERN I/III</div>
+        <h2 className="section-heading clip-reveal">The Garment</h2>
+
+        {/* Desktop: SVG blueprint drawn by GSAP — DO NOT TOUCH */}
         <div className="blueprint-svg-container">
           {/* SVG is injected here by suitBlueprint.ts */}
         </div>
@@ -681,6 +693,17 @@ export default function Home() {
         <p className="suit-spec-closer">
           Solo build. Currently in production.
         </p>
+
+        {/* Document footer strip — bottom edge */}
+        <div className="garment-doc-footer" aria-hidden="true">
+          <span className="garment-doc-meta">DRAFTED 04.2026</span>
+          <span className="garment-doc-sep">·</span>
+          <span className="garment-doc-meta">G.M.</span>
+          <span className="garment-doc-sep">·</span>
+          <span className="garment-doc-meta">CHALK ON BROWN PAPER</span>
+          <span className="garment-doc-sep">·</span>
+          <span className="garment-doc-meta">v3</span>
+        </div>
       </section>
 
       {/* ── 4. TICKER ── */}
