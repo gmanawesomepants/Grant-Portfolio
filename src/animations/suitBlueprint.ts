@@ -97,10 +97,24 @@ const CALLOUTS = [
   { anchor: [300, 390], end: [390, 390], text: "GDPR-Compliant Architecture", side: "right", gap: 20 },
 ];
 
-function initBlueprintMobile(container: HTMLElement) {
+function initBlueprintMobile(section: HTMLElement, container: HTMLElement) {
   container.innerHTML = "";
 
+  // Hide the CSS-only fallback list — JS provides the animated label column
+  const fallback = section.querySelector(".blueprint-mobile-fallback") as HTMLElement | null;
+  if (fallback) fallback.style.display = "none";
+
+  // ── Two-column flex layout ──
+  // Left: jacket SVG (~52%).  Right: numbered label list (~48%).
+  const jacketCol = document.createElement("div");
+  jacketCol.className = "blueprint-jacket-col";
+
+  const labelCol = document.createElement("div");
+  labelCol.className = "blueprint-label-col";
+
   const svgNS = "http://www.w3.org/2000/svg";
+
+  // ── SVG jacket ──
   const svg = document.createElementNS(svgNS, "svg");
   svg.setAttribute("viewBox", `0 0 ${VB_WIDTH} ${VB_HEIGHT}`);
   svg.setAttribute("width", "100%");
@@ -110,25 +124,27 @@ function initBlueprintMobile(container: HTMLElement) {
   svg.setAttribute("role", "img");
   svg.setAttribute("aria-label", "RevenueOS system architecture rendered as a dinner jacket technical schematic");
   svg.style.display = "block";
-  svg.style.overflow = "hidden";
 
-  // Outline — fully drawn (no dash animation)
+  // Group 1: Outline (animated via stroke-dashoffset)
   const outlineGroup = document.createElementNS(svgNS, "g");
   outlineGroup.setAttribute("stroke", "var(--color-amber)");
   outlineGroup.setAttribute("stroke-opacity", "0.22");
   outlineGroup.setAttribute("stroke-width", "1.5");
+  const outlinePaths: SVGPathElement[] = [];
   [BODY_OUTLINE, SLEEVE_LEFT, SLEEVE_RIGHT].forEach((d) => {
     const p = document.createElementNS(svgNS, "path");
     p.setAttribute("d", d);
+    outlinePaths.push(p);
     outlineGroup.appendChild(p);
   });
   svg.appendChild(outlineGroup);
 
-  // Lapels — fully drawn
+  // Group 2: Lapels (animated)
   const lapelGroup = document.createElementNS(svgNS, "g");
   lapelGroup.setAttribute("stroke", "var(--color-amber)");
   lapelGroup.setAttribute("stroke-opacity", "0.22");
   lapelGroup.setAttribute("stroke-width", "1.5");
+  const lapelPaths: SVGPathElement[] = [];
   [
     { d: COLLAR },
     { d: LAPEL_LEFT },
@@ -139,14 +155,16 @@ function initBlueprintMobile(container: HTMLElement) {
     const p = document.createElementNS(svgNS, "path");
     p.setAttribute("d", spec.d);
     if (spec.strokeWidth) p.setAttribute("stroke-width", spec.strokeWidth);
+    lapelPaths.push(p);
     lapelGroup.appendChild(p);
   });
   svg.appendChild(lapelGroup);
 
-  // Details — fully visible immediately
+  // Group 3: Details (fade in as a group)
   const detailGroup = document.createElementNS(svgNS, "g");
   detailGroup.setAttribute("stroke", "var(--color-amber)");
   detailGroup.setAttribute("stroke-opacity", "0.22");
+  detailGroup.style.opacity = "0";
   [
     { d: "M 200,215 L 200,237", opacity: "0.7" },
     { d: "M 200,247 L 200,277", opacity: "0.7" },
@@ -201,7 +219,108 @@ function initBlueprintMobile(container: HTMLElement) {
   });
   svg.appendChild(detailGroup);
 
-  container.appendChild(svg);
+  // ── Numbered callout dots on the jacket ──
+  // Numbered circles appear at each anchor point — matched by number to the right column.
+  const dotGroups: SVGGElement[] = [];
+  CALLOUTS.forEach((co, i) => {
+    const g = document.createElementNS(svgNS, "g");
+    g.style.opacity = "0";
+
+    // Background fill so number reads clearly over the jacket lines
+    const bg = document.createElementNS(svgNS, "circle");
+    bg.setAttribute("cx", `${co.anchor[0]}`);
+    bg.setAttribute("cy", `${co.anchor[1]}`);
+    bg.setAttribute("r", "10");
+    bg.setAttribute("fill", "#0E0A06");
+    bg.setAttribute("stroke", "var(--color-amber)");
+    bg.setAttribute("stroke-width", "0.8");
+    bg.setAttribute("stroke-opacity", "0.45");
+    g.appendChild(bg);
+
+    const num = document.createElementNS(svgNS, "text");
+    num.setAttribute("x", `${co.anchor[0]}`);
+    num.setAttribute("y", `${co.anchor[1] + 3}`);
+    num.setAttribute("text-anchor", "middle");
+    num.setAttribute("fill", "var(--color-amber)");
+    num.setAttribute("font-size", "7.5");
+    num.setAttribute("font-weight", "600");
+    num.setAttribute("font-family", "Outfit, sans-serif");
+    num.textContent = String(i + 1).padStart(2, "0");
+    g.appendChild(num);
+
+    svg.appendChild(g);
+    dotGroups.push(g);
+  });
+
+  jacketCol.appendChild(svg);
+
+  // ── Numbered label items (right column) ──
+  const labelEls: HTMLDivElement[] = [];
+  CALLOUTS.forEach((co, i) => {
+    const item = document.createElement("div");
+    item.className = "blueprint-label-item";
+    item.style.opacity = "0";
+
+    const numSpan = document.createElement("span");
+    numSpan.className = "blueprint-label-num";
+    numSpan.textContent = String(i + 1).padStart(2, "0");
+
+    const textSpan = document.createElement("span");
+    textSpan.className = "blueprint-label-text";
+    textSpan.textContent = co.text;
+
+    item.appendChild(numSpan);
+    item.appendChild(textSpan);
+    labelCol.appendChild(item);
+    labelEls.push(item);
+  });
+
+  container.appendChild(jacketCol);
+  container.appendChild(labelCol);
+
+  // ── Stroke-dash setup ──
+  outlinePaths.forEach((p) => {
+    const len = (p as SVGGeometryElement).getTotalLength();
+    p.style.strokeDasharray = `${len}`;
+    p.style.strokeDashoffset = `${len}`;
+  });
+  lapelPaths.forEach((p) => {
+    const len = (p as SVGGeometryElement).getTotalLength();
+    p.style.strokeDasharray = `${len}`;
+    p.style.strokeDashoffset = `${len}`;
+  });
+
+  // ── GSAP ScrollTrigger — mobile timeline ──
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start: "top top",
+      end: "+=220%",
+      pin: true,
+      scrub: 0.5,
+    },
+  });
+
+  triggers.push(tl.scrollTrigger!);
+
+  // Phase 1: Draw jacket (same timing as desktop)
+  tl.to(outlinePaths[0], { strokeDashoffset: 0, duration: 1.4, ease: "none" }, 0);
+  tl.to(outlinePaths[1], { strokeDashoffset: 0, duration: 1.2, ease: "none" }, 0.3);
+  tl.to(outlinePaths[2], { strokeDashoffset: 0, duration: 1.2, ease: "none" }, 0.3);
+  lapelPaths.forEach((p, i) => {
+    tl.to(p, { strokeDashoffset: 0, duration: 1.0, ease: "none" }, 0.6 + i * 0.1);
+  });
+  tl.to(detailGroup, { opacity: 1, duration: 0.5, ease: "none" }, 1.4);
+
+  // Phase 2: Numbered dots + matching label items reveal sequentially
+  dotGroups.forEach((g, i) => {
+    const t = 2.2 + i * 0.5;
+    tl.to(g, { opacity: 1, duration: 0.2, ease: "none" }, t);
+    tl.to(labelEls[i], { opacity: 1, duration: 0.2, ease: "none" }, t + 0.05);
+  });
+
+  // Hold at end
+  tl.to({}, { duration: 0.5 }, 2.2 + CALLOUTS.length * 0.5 + 0.3);
 }
 
 export function initBlueprint() {
@@ -214,7 +333,7 @@ export function initBlueprint() {
   if (!container) return;
 
   if (window.innerWidth <= 768) {
-    initBlueprintMobile(container);
+    initBlueprintMobile(section, container);
     return;
   }
 
