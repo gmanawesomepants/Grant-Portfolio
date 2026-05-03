@@ -422,8 +422,9 @@ function FittingReport({
       >
         <div className="fitting-report-label">SYSTEM BLUEPRINT</div>
         <div className="fitting-blueprint-stack">
-          {LAYERS.map((layer) => (
+          {LAYERS.map((layer, i) => (
             <div key={layer.key} className="fitting-blueprint-layer">
+              <div className="fitting-blueprint-layer-num">{`LAYER ${String(i + 1).padStart(2, "0")}`}</div>
               <div className="fitting-blueprint-layer-name">{layer.name}</div>
               <div className="fitting-blueprint-layer-detail">
                 {layer.detail}
