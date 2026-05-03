@@ -369,12 +369,22 @@ function FittingReport({
     <div className={`fitting-report${visible ? " reveal" : ""}`}>
       <div className="fitting-report-tag">FITTING REPORT</div>
 
-      <h3
-        className="fitting-report-heading report-anim"
+      <div
+        className="fitting-report-heading-block report-anim"
         style={{ transitionDelay: `${200 + animIndex++ * 70}ms` }}
       >
-        SYSTEM FITTING — {industry.toUpperCase()}
-      </h3>
+        <div className="fitting-report-step">STEP 2 · FITTING REPORT</div>
+        <h3 className="fitting-report-heading">
+          System Fitting <span className="fitting-report-em-dash">—</span> {industry.toUpperCase()}
+        </h3>
+        <div className="fitting-report-stamp" aria-hidden="true">
+          <span>DRAFTED {new Date().toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" }).toUpperCase()}</span>
+          <span className="fitting-report-stamp-sep">·</span>
+          <span>G.M.</span>
+          <span className="fitting-report-stamp-sep">·</span>
+          <span>v3</span>
+        </div>
+      </div>
 
       <div
         className="fitting-report-section report-anim"
