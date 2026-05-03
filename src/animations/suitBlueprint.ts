@@ -97,15 +97,126 @@ const CALLOUTS = [
   { anchor: [300, 390], end: [390, 390], text: "GDPR-Compliant Architecture", side: "right", gap: 20 },
 ];
 
+function initBlueprintMobile(container: HTMLElement) {
+  container.innerHTML = "";
+
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${VB_WIDTH} ${VB_HEIGHT}`);
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("stroke-linecap", "round");
+  svg.setAttribute("stroke-linejoin", "round");
+  svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", "RevenueOS system architecture rendered as a dinner jacket technical schematic");
+  svg.style.display = "block";
+  svg.style.overflow = "hidden";
+
+  // Outline — fully drawn (no dash animation)
+  const outlineGroup = document.createElementNS(svgNS, "g");
+  outlineGroup.setAttribute("stroke", "var(--color-amber)");
+  outlineGroup.setAttribute("stroke-opacity", "0.22");
+  outlineGroup.setAttribute("stroke-width", "1.5");
+  [BODY_OUTLINE, SLEEVE_LEFT, SLEEVE_RIGHT].forEach((d) => {
+    const p = document.createElementNS(svgNS, "path");
+    p.setAttribute("d", d);
+    outlineGroup.appendChild(p);
+  });
+  svg.appendChild(outlineGroup);
+
+  // Lapels — fully drawn
+  const lapelGroup = document.createElementNS(svgNS, "g");
+  lapelGroup.setAttribute("stroke", "var(--color-amber)");
+  lapelGroup.setAttribute("stroke-opacity", "0.22");
+  lapelGroup.setAttribute("stroke-width", "1.5");
+  [
+    { d: COLLAR },
+    { d: LAPEL_LEFT },
+    { d: LAPEL_LEFT_INNER, strokeWidth: "1.0" },
+    { d: LAPEL_RIGHT },
+    { d: LAPEL_RIGHT_INNER, strokeWidth: "1.0" },
+  ].forEach((spec) => {
+    const p = document.createElementNS(svgNS, "path");
+    p.setAttribute("d", spec.d);
+    if (spec.strokeWidth) p.setAttribute("stroke-width", spec.strokeWidth);
+    lapelGroup.appendChild(p);
+  });
+  svg.appendChild(lapelGroup);
+
+  // Details — fully visible immediately
+  const detailGroup = document.createElementNS(svgNS, "g");
+  detailGroup.setAttribute("stroke", "var(--color-amber)");
+  detailGroup.setAttribute("stroke-opacity", "0.22");
+  [
+    { d: "M 200,215 L 200,237", opacity: "0.7" },
+    { d: "M 200,247 L 200,277", opacity: "0.7" },
+    { d: "M 200,287 L 200,372", opacity: "0.7" },
+  ].forEach((seg) => {
+    const p = document.createElementNS(svgNS, "path");
+    p.setAttribute("d", seg.d);
+    p.setAttribute("stroke-width", "1");
+    p.setAttribute("stroke-opacity", seg.opacity);
+    detailGroup.appendChild(p);
+  });
+  ["M 240,163 L 278,159", "M 240,163 L 240,170 L 278,166 L 278,159"].forEach((d) => {
+    const p = document.createElementNS(svgNS, "path");
+    p.setAttribute("d", d);
+    p.setAttribute("stroke-width", "1");
+    detailGroup.appendChild(p);
+  });
+  [
+    ["M 120,290 L 185,283", "M 120,290 L 120,302 L 185,295 L 185,283"],
+    ["M 280,290 L 215,283", "M 280,290 L 280,302 L 215,295 L 215,283"],
+  ].forEach((pocket) => {
+    const g = document.createElementNS(svgNS, "g");
+    pocket.forEach((d) => {
+      const p = document.createElementNS(svgNS, "path");
+      p.setAttribute("d", d);
+      p.setAttribute("stroke-width", "1");
+      g.appendChild(p);
+    });
+    detailGroup.appendChild(g);
+  });
+  [{ cx: 200, cy: 242 }, { cx: 200, cy: 282 }].forEach((b) => {
+    const outer = document.createElementNS(svgNS, "circle");
+    outer.setAttribute("cx", `${b.cx}`);
+    outer.setAttribute("cy", `${b.cy}`);
+    outer.setAttribute("r", "4");
+    outer.setAttribute("stroke-width", "1");
+    detailGroup.appendChild(outer);
+    const inner = document.createElementNS(svgNS, "circle");
+    inner.setAttribute("cx", `${b.cx}`);
+    inner.setAttribute("cy", `${b.cy}`);
+    inner.setAttribute("r", "1.5");
+    inner.setAttribute("stroke-width", "0.6");
+    inner.setAttribute("stroke-opacity", "0.35");
+    detailGroup.appendChild(inner);
+  });
+  [{ d: "M 72,382 L 118,382" }, { d: "M 328,382 L 282,382" }].forEach((cuff) => {
+    const p = document.createElementNS(svgNS, "path");
+    p.setAttribute("d", cuff.d);
+    p.setAttribute("stroke-width", "0.9");
+    p.setAttribute("stroke-opacity", "0.5");
+    detailGroup.appendChild(p);
+  });
+  svg.appendChild(detailGroup);
+
+  container.appendChild(svg);
+}
+
 export function initBlueprint() {
   if (typeof window === "undefined") return;
-  if (window.innerWidth <= 768) return;
 
   const section = document.getElementById("suit-spec");
   if (!section) return;
 
   const container = section.querySelector(".blueprint-svg-container") as HTMLElement;
   if (!container) return;
+
+  if (window.innerWidth <= 768) {
+    initBlueprintMobile(container);
+    return;
+  }
 
   container.innerHTML = "";
 

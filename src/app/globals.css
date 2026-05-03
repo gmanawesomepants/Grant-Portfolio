@@ -1423,14 +1423,16 @@ a {
 
 @media (max-width: 768px) {
   .blueprint-svg-container {
-    display: none;
+    display: block;
+    max-width: 260px;
+    margin: 1.5rem auto 0;
   }
 
   .blueprint-mobile-fallback {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    margin: 2rem auto;
+    margin: 1.5rem auto 2rem;
     max-width: 400px;
   }
 
