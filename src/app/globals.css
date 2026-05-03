@@ -1331,6 +1331,20 @@ a {
   }
 }
 
+/* The Garment heading — sits below the doc header strip */
+.suit-spec .section-heading {
+  margin-top: 1.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Garment-tag eyebrow becomes more like a draft-stamp in this section */
+.suit-spec .garment-tag {
+  margin-top: 0;
+  position: relative;
+  z-index: 1;
+}
+
 /* Call-out text labels (positioned dynamically by JS) */
 .callout-label {
   position: absolute;
