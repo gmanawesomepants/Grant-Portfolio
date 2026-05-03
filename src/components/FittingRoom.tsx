@@ -200,6 +200,13 @@ export default function FittingRoom({
         {/* Form */}
         {state === "idle" && (
           <form className="fitting-form" onSubmit={handleSubmit}>
+            <div className="fitting-eyebrow" aria-hidden="true">
+              <span className="fitting-eyebrow-step">STEP 1</span>
+              <span className="fitting-eyebrow-sep">·</span>
+              <span className="fitting-eyebrow-label">MEASUREMENTS</span>
+              <div className="fitting-tape-rule" />
+            </div>
+
             <div className="fitting-field">
               <label className="fitting-label" htmlFor="fitting-industry">
                 Industry / Business Type

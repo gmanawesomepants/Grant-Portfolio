@@ -1521,6 +1521,64 @@ a {
   padding: 2rem 0;
 }
 
+/* ── Fitting Room — Form Eyebrow ── */
+
+.fitting-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 0.5rem;
+}
+
+.fitting-eyebrow-step {
+  color: var(--color-amber);
+  letter-spacing: 0.22em;
+}
+
+.fitting-eyebrow-label {
+  color: var(--color-text-muted);
+}
+
+.fitting-eyebrow-sep {
+  color: var(--color-amber-dim);
+  font-size: 0.85rem;
+  line-height: 1;
+  position: relative;
+  top: -0.05em;
+}
+
+.fitting-tape-rule {
+  position: relative;
+  flex: 1;
+  height: 9px;
+  margin-left: 0.4rem;
+  background: linear-gradient(
+    180deg,
+    transparent calc(50% - 0.5px),
+    var(--color-amber) calc(50% - 0.5px),
+    var(--color-amber) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+  opacity: 0.45;
+}
+
+.fitting-tape-rule::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 19px, var(--color-amber) 19px 20px),
+    repeating-linear-gradient(90deg, transparent 0 9px, color-mix(in srgb, var(--color-amber) 50%, transparent) 9px 10px);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
+}
+
 .fitting-field {
   display: flex;
   flex-direction: column;
