@@ -1243,6 +1243,94 @@ a {
   opacity: 0;
 }
 
+/* ── The Garment — Document Chrome ── */
+/* Header & footer strips frame the section as a tailor's spec sheet. */
+/* These render at full opacity on entry — they are document frame, not reveal. */
+
+.garment-doc-header,
+.garment-doc-footer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92%, 1100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.garment-doc-header {
+  top: 1.6rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--color-amber-dim);
+}
+
+.garment-doc-footer {
+  bottom: 1.6rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--color-amber-dim);
+}
+
+.garment-doc-style {
+  color: var(--color-amber);
+  letter-spacing: 0.22em;
+}
+
+.garment-doc-name {
+  color: var(--color-text-muted);
+}
+
+.garment-doc-house,
+.garment-doc-meta {
+  color: var(--color-text-faint);
+}
+
+.garment-doc-sep {
+  color: var(--color-amber-dim);
+  font-size: 0.85rem;
+  line-height: 1;
+  position: relative;
+  top: -0.05em;
+}
+
+#suit-spec {
+  position: relative;
+}
+
+.garment-doc-crease {
+  position: absolute;
+  top: 4.5rem;
+  bottom: 4.5rem;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--color-divider) 12%,
+    var(--color-divider) 88%,
+    transparent 100%
+  );
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .garment-doc-header,
+  .garment-doc-footer,
+  .garment-doc-crease {
+    display: none;
+  }
+}
+
 /* Call-out text labels (positioned dynamically by JS) */
 .callout-label {
   position: absolute;
