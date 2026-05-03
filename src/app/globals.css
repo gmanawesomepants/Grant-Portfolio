@@ -2348,10 +2348,34 @@ a {
     font-size: 2.8rem;
   }
 
-  /* ── Skip fade-in animations on mobile — show content immediately ── */
-  /* IntersectionObserver is unreliable at mobile viewport heights; */
-  /* elements stay opacity:0 rather than fading in. */
+  /* ── Skip all entrance animations on mobile — show content immediately ── */
+  /* IntersectionObserver is unreliable at mobile viewport heights;        */
+  /* clip-reveal / tag-enter / fade-in / closer-fade all default to hidden  */
+  /* and stay that way if the IO never fires. Override all four here.       */
   .fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: none;
+  }
+
+  .clip-reveal {
+    clip-path: inset(0 0 0 0);
+    transition: none;
+  }
+
+  .tag-enter {
+    opacity: 1;
+    transform: translateX(0);
+    transition: none;
+  }
+
+  .tag-enter::before,
+  .tag-enter::after {
+    height: 100%;
+    transition: none;
+  }
+
+  .closer-fade {
     opacity: 1;
     transform: translateY(0);
     transition: none;
