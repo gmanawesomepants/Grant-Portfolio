@@ -265,7 +265,8 @@ function initBlueprintMobile(section: HTMLElement, container: HTMLElement) {
 
   jacketCol.appendChild(svg);
 
-  // ── Label items: absolutely positioned in right column at matching y% ──
+  // ── Label items: absolutely positioned in right column ──
+  // top% is set as a fallback; rAF below recalculates from actual SVG pixel height.
   const labelEls: HTMLDivElement[] = [];
   CALLOUTS.forEach((co, i) => {
     const item = document.createElement("div");
@@ -279,6 +280,17 @@ function initBlueprintMobile(section: HTMLElement, container: HTMLElement) {
 
   container.appendChild(jacketCol);
   container.appendChild(labelCol);
+
+  // Sync label positions to actual SVG rendered height so dots align precisely
+  requestAnimationFrame(() => {
+    const svgH = svg.getBoundingClientRect().height;
+    if (svgH > 0) {
+      labelCol.style.height = `${svgH}px`;
+      labelEls.forEach((item, i) => {
+        item.style.top = `${(mobileEndY[i] / VB_HEIGHT) * svgH}px`;
+      });
+    }
+  });
 
   // ── Stroke-dash setup ──
   outlinePaths.forEach((p) => {

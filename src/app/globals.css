@@ -1422,6 +1422,16 @@ a {
 }
 
 @media (max-width: 768px) {
+  /* Fill viewport height and center content so no dead space below the blueprint */
+  #suit-spec {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
   /* Two-column animated layout — jacket 65% left, callout labels 35% right */
   .blueprint-svg-container {
     display: flex;
