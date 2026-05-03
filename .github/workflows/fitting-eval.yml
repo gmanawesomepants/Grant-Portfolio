@@ -1,0 +1,162 @@
+# Fitting Room — Reasoning Effort Weekly Comparison
+#
+# Runs every Monday 9:07am UTC. Tests reasoning_effort:"low" vs "none" across
+# 6 fixtures with model-as-judge scoring and writes a decision doc to docs/eval-logs/.
+#
+# Required secrets:
+#   OPENAI_API_KEY        — your OpenAI key (the comparison calls OpenAI directly)
+#
+# Optional secrets:
+#   DISCORD_WEBHOOK_URL   — if set, results post here; if not, a GitHub issue is opened instead
+#
+# Manual trigger: Actions → "Fitting Room Eval" → Run workflow
+#
+# To disable: delete this file or comment out the schedule block.
+
+name: Fitting Room Eval
+
+on:
+  schedule:
+    - cron: "7 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check for OPENAI_API_KEY
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::error::OPENAI_API_KEY secret is not set. Add it in repo Settings → Secrets → Actions."
+            exit 1
+          fi
+
+      - name: Run comparison (2 passes × 6 fixtures × 2 modes + judge)
+        id: run
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          set +e
+          npm run eval:fitting:compare 2>&1 | tee /tmp/compare-out.txt
+          EVAL_EXIT=$?
+          set -e
+          echo "eval_exit=$EVAL_EXIT" >> "$GITHUB_OUTPUT"
+
+      - name: Extract decision and guardrail numbers
+        id: result
+        run: |
+          DECISION=$(grep "^DECISION:" /tmp/compare-out.txt | head -1 | sed 's/^DECISION: //')
+          P50_LINE=$(grep "p50 savings:" /tmp/compare-out.txt | head -1 | xargs)
+          DELTA_LINE=$(grep "combined delta" /tmp/compare-out.txt | head -1 | xargs)
+          CACHE_LINE=$(grep -A1 "^GUARDRAIL 1" /tmp/compare-out.txt | tail -1 | xargs)
+          DATE=$(date +%Y-%m-%d)
+
+          # Gate fail if no decision was produced
+          if [ -z "$DECISION" ]; then
+            DECISION="GATE_FAIL — comparison produced no output (check workflow logs)"
+          fi
+
+          # Write outputs — single-line values only
+          echo "decision=$DECISION" >> "$GITHUB_OUTPUT"
+          echo "p50_line=$P50_LINE" >> "$GITHUB_OUTPUT"
+          echo "delta_line=$DELTA_LINE" >> "$GITHUB_OUTPUT"
+          echo "cache_line=$CACHE_LINE" >> "$GITHUB_OUTPUT"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+          echo "doc_url=https://github.com/${{ github.repository }}/blob/main/docs/eval-logs/reasoning-effort-comparison-${DATE}.md" >> "$GITHUB_OUTPUT"
+
+          echo "Decision: $DECISION"
+
+      - name: Commit decision doc
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/eval-logs/
+          if git diff --staged --quiet; then
+            echo "No new decision doc to commit (comparison may have errored before writing)."
+          else
+            git commit -m "eval: reasoning effort comparison ${{ steps.result.outputs.date }}"
+            git push
+          fi
+
+      - name: Choose notification channel
+        id: notif
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+            echo "channel=discord" >> "$GITHUB_OUTPUT"
+          else
+            echo "channel=issue" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Discord: sends a one-liner with decision + key numbers + link
+      - name: Notify — Discord
+        if: steps.notif.outputs.channel == 'discord'
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          DECISION="${{ steps.result.outputs.decision }}"
+          P50="${{ steps.result.outputs.p50_line }}"
+          DELTA="${{ steps.result.outputs.delta_line }}"
+          DOC="${{ steps.result.outputs.doc_url }}"
+          DATE="${{ steps.result.outputs.date }}"
+
+          # Escape double quotes for JSON
+          DECISION_ESC=$(echo "$DECISION" | sed 's/"/\\"/g')
+          MSG="**[Fitting Room Eval — ${DATE}]**\n**${DECISION_ESC}**\n${P50}\n${DELTA}\n\nFull results: ${DOC}"
+
+          curl -sf -X POST "$DISCORD_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "{\"content\": \"${MSG}\"}" \
+          || echo "::warning::Discord notification failed — check webhook URL."
+
+      # GitHub Issue fallback: creates an issue on the repo so you get an email
+      - name: Notify — GitHub Issue (fallback)
+        if: steps.notif.outputs.channel == 'issue'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          DECISION="${{ steps.result.outputs.decision }}"
+          P50="${{ steps.result.outputs.p50_line }}"
+          DELTA="${{ steps.result.outputs.delta_line }}"
+          CACHE="${{ steps.result.outputs.cache_line }}"
+          DOC="${{ steps.result.outputs.doc_url }}"
+          DATE="${{ steps.result.outputs.date }}"
+
+          gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "[Fitting Room Eval] ${DATE} — ${DECISION}" \
+            --body "## Weekly Reasoning Effort Comparison
+
+**Decision:** ${DECISION}
+
+| Guardrail | Result |
+|-----------|--------|
+| Latency | ${P50} |
+| Judge delta | ${DELTA} |
+| Cache health | ${CACHE} |
+
+[Full decision doc with per-fixture judge rationales](${DOC})
+
+---
+*Auto-generated by \`.github/workflows/fitting-eval.yml\`*
+*To redirect to Discord: add a \`DISCORD_WEBHOOK_URL\` secret in repo Settings → Secrets → Actions.*
+*To silence entirely: delete or disable this workflow.*"

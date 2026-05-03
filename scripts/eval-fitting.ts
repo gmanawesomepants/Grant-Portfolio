@@ -86,7 +86,22 @@ const JUDGE_SCHEMA = {
 } as const;
 
 // ── Judge prompt ──────────────────────────────────────────────────────────────
-// This prompt is itself a portfolio artifact — see docs/eval-logs/ for comparison outputs.
+// Treating this as a named prose constant (not prompts.eval.judge.v3.template) is intentional:
+// it reads as a design decision, not config, and surfaces in code review.
+//
+// SELF-PREFERENCE BIAS NOTE:
+// Using gpt-5.5 to judge gpt-5.5 outputs introduces self-preference bias —
+// the judge scores outputs that pattern-match its own style higher than outputs
+// that are objectively equivalent but stylistically different.
+//
+// For THIS comparison (low vs none, same model both arms) the bias is SYMMETRIC
+// and cancels out for relative ranking. It's safe to ignore here.
+//
+// For the NEXT comparison (gpt-5.5 vs gpt-5.4-mini cost A/B), the judge will
+// systematically favor 5.5 outputs. Mitigation options at that point:
+//   1. Use a different judge family (Claude or Gemini)
+//   2. Build a human-rated golden set and calibrate the judge against it first
+// Don't add this now — just know the workaround exists before that run.
 
 const JUDGE_SYSTEM = `You are a calibration judge for an AI-generated System Fitting report.
 Score the report on two dimensions (1-5 each). Be honest — a 4 is good; a 5 means unusually sharp.
