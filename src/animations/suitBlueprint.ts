@@ -100,12 +100,14 @@ const CALLOUTS = [
 function initBlueprintMobile(section: HTMLElement, container: HTMLElement) {
   container.innerHTML = "";
 
-  // Hide the CSS-only fallback list — JS provides the animated label column
+  // Hide fallback list — CSS also backs this up via display:none !important
   const fallback = section.querySelector(".blueprint-mobile-fallback") as HTMLElement | null;
-  if (fallback) fallback.style.display = "none";
+  if (fallback) {
+    fallback.style.display = "none";
+    fallback.setAttribute("aria-hidden", "true");
+  }
 
-  // ── Two-column flex layout ──
-  // Left: jacket SVG (~52%).  Right: numbered label list (~48%).
+  // ── Two-column flex layout: jacket 65%, labels 35% ──
   const jacketCol = document.createElement("div");
   jacketCol.className = "blueprint-jacket-col";
 
@@ -219,58 +221,58 @@ function initBlueprintMobile(section: HTMLElement, container: HTMLElement) {
   });
   svg.appendChild(detailGroup);
 
-  // ── Numbered callout dots on the jacket ──
-  // Numbered circles appear at each anchor point — matched by number to the right column.
-  const dotGroups: SVGGElement[] = [];
+  // ── Callout lines: all redirect to right edge ──
+  // Two callouts share y=290 — offset them to avoid label collision.
+  const mobileEndY = [64, 90, 160, 242, 272, 316, 390];
+
+  const calloutGroups: SVGGElement[] = [];
   CALLOUTS.forEach((co, i) => {
     const g = document.createElementNS(svgNS, "g");
     g.style.opacity = "0";
 
-    // Background fill so number reads clearly over the jacket lines
-    const bg = document.createElementNS(svgNS, "circle");
-    bg.setAttribute("cx", `${co.anchor[0]}`);
-    bg.setAttribute("cy", `${co.anchor[1]}`);
-    bg.setAttribute("r", "10");
-    bg.setAttribute("fill", "#0E0A06");
-    bg.setAttribute("stroke", "var(--color-amber)");
-    bg.setAttribute("stroke-width", "0.8");
-    bg.setAttribute("stroke-opacity", "0.45");
-    g.appendChild(bg);
+    // Anchor dot on the jacket
+    const anchorDot = document.createElementNS(svgNS, "circle");
+    anchorDot.setAttribute("cx", `${co.anchor[0]}`);
+    anchorDot.setAttribute("cy", `${co.anchor[1]}`);
+    anchorDot.setAttribute("r", "2.5");
+    anchorDot.setAttribute("fill", "var(--color-amber)");
+    anchorDot.setAttribute("fill-opacity", "0.55");
+    g.appendChild(anchorDot);
 
-    const num = document.createElementNS(svgNS, "text");
-    num.setAttribute("x", `${co.anchor[0]}`);
-    num.setAttribute("y", `${co.anchor[1] + 3}`);
-    num.setAttribute("text-anchor", "middle");
-    num.setAttribute("fill", "var(--color-amber)");
-    num.setAttribute("font-size", "7.5");
-    num.setAttribute("font-weight", "600");
-    num.setAttribute("font-family", "Outfit, sans-serif");
-    num.textContent = String(i + 1).padStart(2, "0");
-    g.appendChild(num);
+    // Line from anchor diagonally to right edge at mobileEndY
+    const line = document.createElementNS(svgNS, "line");
+    line.setAttribute("x1", `${co.anchor[0]}`);
+    line.setAttribute("y1", `${co.anchor[1]}`);
+    line.setAttribute("x2", "390");
+    line.setAttribute("y2", `${mobileEndY[i]}`);
+    line.setAttribute("stroke", "var(--color-amber)");
+    line.setAttribute("stroke-opacity", "0.35");
+    line.setAttribute("stroke-width", "0.8");
+    g.appendChild(line);
+
+    // End dot at right edge
+    const endDot = document.createElementNS(svgNS, "circle");
+    endDot.setAttribute("cx", "390");
+    endDot.setAttribute("cy", `${mobileEndY[i]}`);
+    endDot.setAttribute("r", "2");
+    endDot.setAttribute("fill", "var(--color-amber)");
+    endDot.setAttribute("fill-opacity", "0.55");
+    g.appendChild(endDot);
 
     svg.appendChild(g);
-    dotGroups.push(g);
+    calloutGroups.push(g);
   });
 
   jacketCol.appendChild(svg);
 
-  // ── Numbered label items (right column) ──
+  // ── Label items: absolutely positioned in right column at matching y% ──
   const labelEls: HTMLDivElement[] = [];
   CALLOUTS.forEach((co, i) => {
     const item = document.createElement("div");
     item.className = "blueprint-label-item";
     item.style.opacity = "0";
-
-    const numSpan = document.createElement("span");
-    numSpan.className = "blueprint-label-num";
-    numSpan.textContent = String(i + 1).padStart(2, "0");
-
-    const textSpan = document.createElement("span");
-    textSpan.className = "blueprint-label-text";
-    textSpan.textContent = co.text;
-
-    item.appendChild(numSpan);
-    item.appendChild(textSpan);
+    item.style.top = `${(mobileEndY[i] / VB_HEIGHT) * 100}%`;
+    item.textContent = co.text;
     labelCol.appendChild(item);
     labelEls.push(item);
   });
@@ -303,7 +305,7 @@ function initBlueprintMobile(section: HTMLElement, container: HTMLElement) {
 
   triggers.push(tl.scrollTrigger!);
 
-  // Phase 1: Draw jacket (same timing as desktop)
+  // Phase 1: Draw jacket
   tl.to(outlinePaths[0], { strokeDashoffset: 0, duration: 1.4, ease: "none" }, 0);
   tl.to(outlinePaths[1], { strokeDashoffset: 0, duration: 1.2, ease: "none" }, 0.3);
   tl.to(outlinePaths[2], { strokeDashoffset: 0, duration: 1.2, ease: "none" }, 0.3);
@@ -312,8 +314,8 @@ function initBlueprintMobile(section: HTMLElement, container: HTMLElement) {
   });
   tl.to(detailGroup, { opacity: 1, duration: 0.5, ease: "none" }, 1.4);
 
-  // Phase 2: Numbered dots + matching label items reveal sequentially
-  dotGroups.forEach((g, i) => {
+  // Phase 2: Callout lines + matching labels reveal sequentially
+  calloutGroups.forEach((g, i) => {
     const t = 2.2 + i * 0.5;
     tl.to(g, { opacity: 1, duration: 0.2, ease: "none" }, t);
     tl.to(labelEls[i], { opacity: 1, duration: 0.2, ease: "none" }, t + 0.05);

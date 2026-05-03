@@ -1422,7 +1422,7 @@ a {
 }
 
 @media (max-width: 768px) {
-  /* Two-column animated layout — jacket left, numbered labels right */
+  /* Two-column animated layout — jacket 65% left, callout labels 35% right */
   .blueprint-svg-container {
     display: flex;
     flex-direction: row;
@@ -1433,57 +1433,32 @@ a {
   }
 
   .blueprint-jacket-col {
-    width: 52%;
+    width: 65%;
     flex-shrink: 0;
   }
 
   .blueprint-label-col {
-    width: 48%;
-    padding-left: 0.75rem;
-    padding-top: 1rem;
+    width: 35%;
+    position: relative;
+    align-self: stretch;
   }
 
+  /* Labels are absolutely positioned at top% matching SVG line endpoint y-coords */
   .blueprint-label-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.35rem;
-    margin-bottom: 0.55rem;
-  }
-
-  .blueprint-label-num {
-    color: var(--color-amber);
+    position: absolute;
+    left: 0.5rem;
+    width: calc(100% - 0.5rem);
+    transform: translateY(-50%);
+    font-family: var(--font-body);
     font-size: 0.5rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    flex-shrink: 0;
-    padding-top: 2px;
-    font-family: var(--font-body);
-  }
-
-  .blueprint-label-text {
+    line-height: 1.3;
     color: var(--color-text-muted);
-    font-size: 0.6rem;
-    line-height: 1.35;
     letter-spacing: 0.02em;
-    font-family: var(--font-body);
   }
 
-  /* CSS-only fallback (no JS) — hidden when JS injects animated version */
+  /* Hide always — JS hides via style, CSS backs it up */
   .blueprint-mobile-fallback {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 1.5rem auto 2rem;
-    max-width: 400px;
-  }
-
-  .blueprint-mobile-item {
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    color: var(--color-text-muted);
-    padding: 0.5rem 0.75rem;
-    border-left: 2px solid var(--color-amber-dim);
-    background: var(--color-amber-trace);
+    display: none !important;
   }
 
 }
