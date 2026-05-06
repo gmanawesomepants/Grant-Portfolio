@@ -615,12 +615,12 @@ a {
   margin: 1.25rem auto;
   background: linear-gradient(
     180deg,
-    transparent calc(50% - 0.5px),
-    var(--color-amber) calc(50% - 0.5px),
-    var(--color-amber) calc(50% + 0.5px),
-    transparent calc(50% + 0.5px)
+    transparent calc(50% - calc(var(--mark-rule-faded-stroke) / 2)),
+    var(--color-amber) calc(50% - calc(var(--mark-rule-faded-stroke) / 2)),
+    var(--color-amber) calc(50% + calc(var(--mark-rule-faded-stroke) / 2)),
+    transparent calc(50% + calc(var(--mark-rule-faded-stroke) / 2))
   );
-  opacity: 0.55;
+  opacity: var(--mark-rule-faded-opacity-deep);
 }
 
 .hero-dash::before {
@@ -630,8 +630,8 @@ a {
   background-image:
     repeating-linear-gradient(90deg, transparent 0 23px, var(--color-amber) 23px 24px),
     repeating-linear-gradient(90deg, transparent 0 11px, color-mix(in srgb, var(--color-amber) 50%, transparent) 11px 12px);
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
-          mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--mark-rule-faded-mask-inset-h), black calc(100% - var(--mark-rule-faded-mask-inset-h)), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, black var(--mark-rule-faded-mask-inset-h), black calc(100% - var(--mark-rule-faded-mask-inset-h)), transparent 100%);
 }
 
 .hero-mantra {
@@ -780,9 +780,9 @@ a {
 .pattern-bar-rule {
   position: relative;
   flex: 1;
-  width: 1px;
+  width: var(--mark-stroke-regular);
   background: var(--color-text-faint);
-  opacity: 0.5;
+  opacity: var(--mark-opacity-default);
   transition: opacity 0.6s;
   margin: 0.5rem 0;
 }
@@ -796,7 +796,7 @@ a {
   position: absolute;
   left: -2px;
   width: 5px;
-  height: 1px;
+  height: var(--mark-stroke-regular);
   background: var(--color-text-faint);
   opacity: 0.15;
   transform: translateY(-50%);
@@ -851,7 +851,7 @@ a {
 
 .pattern-bar-stub {
   width: 12px;
-  height: 1px;
+  height: var(--mark-stroke-regular);
   background: var(--color-text);
   opacity: 0.35;
   transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -2153,8 +2153,8 @@ a {
   position: absolute;
   inset: 0;
   background-image:
-    repeating-linear-gradient(90deg, transparent 0 19px, var(--color-amber) 19px 20px),
-    repeating-linear-gradient(90deg, transparent 0 9px, color-mix(in srgb, var(--color-amber) 50%, transparent) 9px 10px);
+    repeating-linear-gradient(90deg, transparent 0 calc(var(--mark-tape-rule-tick-major) - var(--mark-stroke-regular)), var(--color-amber) calc(var(--mark-tape-rule-tick-major) - var(--mark-stroke-regular)) var(--mark-tape-rule-tick-major)),
+    repeating-linear-gradient(90deg, transparent 0 calc(var(--mark-tape-rule-tick-minor) - var(--mark-stroke-regular)), color-mix(in srgb, var(--color-amber) 50%, transparent) calc(var(--mark-tape-rule-tick-minor) - var(--mark-stroke-regular)) var(--mark-tape-rule-tick-minor));
   -webkit-mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
           mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
 }
