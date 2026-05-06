@@ -1,3 +1,4 @@
+@import "../styles/marks-tokens.css";
 @import "tailwindcss";
 
 @theme {
@@ -727,114 +728,250 @@ a {
   }
 }
 
-/* ── Nav ── */
+/* ── Pattern Bar (vertical tape-rule nav) ── */
 
-.nav {
+.pattern-bar {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
+  bottom: 0;
   z-index: 1000;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  background: color-mix(in srgb, var(--color-bg) 60%, transparent);
-  border-bottom: 1px solid var(--color-divider);
-  padding: 0.85rem 1.5rem;
+  width: 76px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  opacity: 0;
+  padding: 1.5rem 12px 2.5rem 12px;
+  font-family: var(--font-body);
   pointer-events: none;
-  transition: opacity 0.4s;
 }
 
-.nav.visible {
-  opacity: 1;
+.pattern-bar > * {
   pointer-events: auto;
 }
 
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--color-text);
+/* Monogram — top anchor */
+.pattern-bar-monogram {
+  margin-bottom: 1.75rem;
+  flex-shrink: 0;
 }
 
-.nav-monogram {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  position: relative;
-  border: 1px solid var(--color-amber-dim);
-  background: var(--color-amber-trace);
+.pattern-bar-mono-mark {
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-}
-
-.nav-monogram::before,
-.nav-monogram::after {
-  content: '';
-  position: absolute;
-  left: 3px;
-  right: 3px;
-  height: 1px;
-  background: repeating-linear-gradient(90deg, var(--color-amber-dim) 0 2px, transparent 2px 4px);
-}
-
-.nav-monogram::before { top: 0; }
-.nav-monogram::after { bottom: 0; }
-
-.nav-monogram-gm {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 0.9rem;
-  letter-spacing: -0.05em;
-  line-height: 1;
-}
-
-.nav-monogram-m {
-  color: var(--color-amber);
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-}
-
-.nav-link {
+  border: 1px solid var(--color-amber);
+  background: var(--color-amber-trace);
   position: relative;
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--color-text-faint);
-  transition: color 0.2s;
 }
 
-.nav-link::after {
-  content: '';
+.pattern-bar-mono-gm {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--color-text);
+}
+.pattern-bar-mono-m { color: var(--color-amber); }
+
+/* The rule — vertical line */
+.pattern-bar-rule {
+  position: relative;
+  flex: 1;
+  width: 1px;
+  background: var(--color-text-faint);
+  opacity: 0.5;
+  transition: opacity 0.6s;
+  margin: 0.5rem 0;
+}
+
+.pattern-bar.engaged .pattern-bar-rule {
+  opacity: 0.9;
+}
+
+/* Minor ticks — decorative texture */
+.pattern-bar-minor {
   position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
+  left: -2px;
+  width: 5px;
   height: 1px;
-  background: var(--color-amber);
-  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--color-text-faint);
+  opacity: 0.15;
+  transform: translateY(-50%);
 }
 
-.nav-link:hover {
+/* Major ticks — section markers */
+.pattern-bar-ticks {
+  position: absolute;
+  top: calc(1.5rem + 40px + 1.75rem + 0.5rem);
+  left: 0;
+  width: 100%;
+  height: calc(100% - 1.5rem - 40px - 1.75rem - 1rem - 2.5rem);
+  list-style: none;
+  pointer-events: none;
+}
+
+.pattern-bar-tick {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.pattern-bar-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0 12px 8px;
+  text-decoration: none;
+  color: var(--color-text-faint);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  transition: color 0.3s;
+}
+
+.pattern-bar-num {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+  transition: opacity 0.3s, color 0.3s;
+  width: 18px;
+  text-align: right;
+}
+
+.pattern-bar.engaged .pattern-bar-num {
+  opacity: 0.7;
+}
+
+.pattern-bar-stub {
+  width: 12px;
+  height: 1px;
+  background: var(--color-text);
+  opacity: 0.35;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s, opacity 0.3s;
+}
+
+.pattern-bar-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover: reveal label */
+.pattern-bar-link:hover .pattern-bar-num,
+.pattern-bar-link:focus-visible .pattern-bar-num {
+  color: var(--color-text);
+  opacity: 1;
+}
+.pattern-bar-link:hover .pattern-bar-stub,
+.pattern-bar-link:focus-visible .pattern-bar-stub {
+  width: 18px;
+  background: var(--color-text);
+  opacity: 1;
+}
+.pattern-bar-link:hover .pattern-bar-label,
+.pattern-bar-link:focus-visible .pattern-bar-label {
+  opacity: 1;
+  transform: translateX(0);
   color: var(--color-text);
 }
 
-.nav-link:hover::after {
-  width: 100%;
+/* Active state — amber, label always visible */
+.pattern-bar-tick.active .pattern-bar-num {
+  color: var(--color-amber);
+  opacity: 1;
+}
+.pattern-bar-tick.active .pattern-bar-stub {
+  background: var(--color-amber);
+  width: 18px;
+  opacity: 1;
+}
+.pattern-bar-tick.active .pattern-bar-label {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--color-amber);
+}
+
+/* Brass marker — top is set in px via React inline style.
+ * JS reads actual tick element centers from the DOM (getBoundingClientRect)
+ * and interpolates between them, guaranteeing perfect alignment with ticks
+ * regardless of any CSS padding/rem/layout changes.
+ */
+.pattern-bar-marker {
+  position: absolute;
+  left: 50%;
+  top: 0; /* overridden every scroll event by React inline style */
+  width: 6px;
+  height: 6px;
+  background: var(--color-amber);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-amber) 40%, transparent);
+  transition: top 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.pattern-bar.engaged .pattern-bar-marker {
+  opacity: 1;
+}
+
+/* Mobile tap area (hidden on desktop) */
+.pattern-bar-tap {
+  display: none;
+}
+
+/* Focus styles */
+.pattern-bar-link:focus-visible {
+  outline: none;
+}
+.pattern-bar-link:focus-visible .pattern-bar-stub {
+  outline: 1px solid var(--color-amber);
+  outline-offset: 4px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pattern-bar-marker {
+    transition: none;
+  }
+  .pattern-bar-stub,
+  .pattern-bar-label,
+  .pattern-bar-num,
+  .pattern-bar-rule {
+    transition: opacity 0.01ms, color 0.01ms;
+  }
+  .mobile-nav-drawer {
+    transition: none;
+  }
+  .mobile-nav-toggle span {
+    transition: none;
+  }
+}
+
+/* Mobile nav hidden by default — shown only inside the ≤768 media query */
+.mobile-nav-bar { display: none; }
+.mobile-nav-drawer { display: none; }
+
+/* ── Body offset — account for fixed 76px pattern bar ── */
+@media (min-width: 769px) {
+  body {
+    padding-left: 76px;
+  }
 }
 
 /* ── Work / Case Study Cards ── */
@@ -843,12 +980,12 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0;
-  margin-top: 2rem;
-  border-bottom: 1px solid var(--color-divider);
+  margin-top: 3.5rem;
+  border-bottom: 1px solid var(--color-amber-dim);
 }
 
 .case-card {
-  border-top: 1px solid var(--color-divider);
+  border-top: 1px solid var(--color-amber-dim);
   padding: 2rem 0;
   position: relative;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -883,13 +1020,34 @@ a {
 }
 
 .case-card-number {
-  position: absolute;
-  top: 2rem;
-  right: 0;
-  font-family: var(--font-body);
-  font-size: 0.55rem;
-  color: var(--color-amber);
-  opacity: 0.25;
+  font-family: monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.case-card-number::before {
+  content: "PATTERN NO.";
+  display: block;
+  font-size: 0.5rem;
+  letter-spacing: 0.32em;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.case-card-number::after {
+  content: "";
+  display: block;
+  margin-top: 5px;
+  width: 26px;
+  height: 1px;
+  background: var(--color-amber);
+  opacity: 0.5;
 }
 
 .case-card-category {
@@ -922,7 +1080,7 @@ a {
 .case-card-metrics {
   font-family: var(--font-body);
   font-size: 0.78rem;
-  color: var(--color-text-faint);
+  color: #F0E8DA66;
   line-height: 2;
   margin-bottom: 0.75rem;
 }
@@ -938,6 +1096,184 @@ a {
   font-family: var(--font-body);
   font-size: 0.88rem;
   color: var(--color-amber-light);
+}
+
+/* ── Case study architecture diagrams ── */
+
+.case-card-diagram {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Spec-sheet layout wrappers */
+.case-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.case-card-diagram-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.case-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Desktop: two-column spec-sheet grid */
+@media (min-width: 1024px) {
+  .case-card {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    column-gap: 4rem;
+    row-gap: 0;
+    align-items: start;
+    padding: 4rem 0;
+  }
+
+  .case-card-meta {
+    grid-column: 1 / -1;
+  }
+
+  .case-card-diagram-wrap {
+    grid-column: 1;
+    width: 340px;
+    height: 280px;
+  }
+
+  .case-card-content {
+    grid-column: 2;
+    max-width: 52ch;
+  }
+}
+
+/* Mobile/tablet: diagram is the hero, content stacks below */
+@media (max-width: 1023px) {
+  .section-wrapper {
+    padding: 3.5rem 1.5rem;
+  }
+
+  .case-card {
+    display: block;
+    padding: 3rem 0;
+  }
+
+  .case-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.75rem;
+  }
+
+  .case-card-diagram-wrap {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 360 / 280;
+    margin-bottom: 2rem;
+    opacity: 1;
+    overflow: visible;
+  }
+
+  .case-card-diagram {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .case-card-content {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .case-card-title {
+    font-size: 1.75rem;
+    line-height: 1.15;
+  }
+
+  .case-card-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .case-card-closer {
+    font-size: 0.95rem;
+    padding-left: 0.875rem;
+  }
+
+  .case-card-metrics {
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+}
+
+/* Small mobile — additional tightening below 480px */
+@media (max-width: 479px) {
+  .case-card {
+    padding: 2.5rem 0;
+  }
+
+  .case-card-title {
+    font-size: 1.5rem;
+  }
+
+  .case-card-meta {
+    margin-bottom: 1.5rem;
+  }
+
+  .case-card-diagram-wrap {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Stroke-draw animation — arch-g1 draws first, arch-g2 second */
+.fade-in .case-card-diagram .arch-g1 line,
+.fade-in .case-card-diagram .arch-g1 circle,
+.fade-in .case-card-diagram .arch-g1 path,
+.fade-in .case-card-diagram .arch-g1 rect,
+.fade-in .case-card-diagram .arch-g2 line,
+.fade-in .case-card-diagram .arch-g2 circle,
+.fade-in .case-card-diagram .arch-g2 path,
+.fade-in .case-card-diagram .arch-g2 rect {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s ease-out;
+}
+
+.fade-in.visible .case-card-diagram .arch-g1 line,
+.fade-in.visible .case-card-diagram .arch-g1 circle,
+.fade-in.visible .case-card-diagram .arch-g1 path,
+.fade-in.visible .case-card-diagram .arch-g1 rect {
+  stroke-dashoffset: 0;
+  transition-delay: 0.25s;
+}
+
+.fade-in.visible .case-card-diagram .arch-g2 line,
+.fade-in.visible .case-card-diagram .arch-g2 circle,
+.fade-in.visible .case-card-diagram .arch-g2 path,
+.fade-in.visible .case-card-diagram .arch-g2 rect {
+  stroke-dashoffset: 0;
+  transition-delay: 0.65s;
+}
+
+/* arch-g3: accent marks + annotations — fade in last */
+.fade-in .case-card-diagram .arch-g3 {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.fade-in.visible .case-card-diagram .arch-g3 {
+  opacity: 1;
+  transition-delay: 1.05s;
 }
 
 /* ── Ticker ── */
@@ -1143,6 +1479,208 @@ a {
   width: 100%;
 }
 
+/* ── Pattern Book (Services) ── */
+/* Tap-to-advance card stack. No GSAP — React state + CSS animations. */
+
+.pb-stage {
+  position: relative;
+  margin-top: 2.5rem;
+  max-width: 640px;
+  padding-bottom: 14px; /* room for shadow-card offset */
+}
+
+/* Shadow cards: visible edges of the cards beneath */
+.pb-stack-shadows {
+  position: absolute;
+  inset: 0;
+}
+
+.pb-shadow {
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--color-amber) 12%, transparent);
+  background: var(--color-bg-elevated);
+  pointer-events: none;
+}
+
+.pb-shadow-1 {
+  transform: translate(5px, 7px);
+  opacity: 0.55;
+}
+
+.pb-shadow-2 {
+  transform: translate(10px, 14px);
+  opacity: 0.28;
+}
+
+/* Active card */
+.pb-card {
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg-elevated);
+  border: 1px solid color-mix(in srgb, var(--color-amber) 20%, transparent);
+  border-left: 2px solid color-mix(in srgb, var(--color-amber) 30%, transparent);
+  transform-origin: left center;
+}
+
+.pb-card--out {
+  animation: pb-fold-out 0.28s ease-in forwards;
+  pointer-events: none;
+}
+
+.pb-card--in {
+  animation: pb-fold-in 0.28s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes pb-fold-out {
+  0%   { transform: perspective(900px) rotateY(0deg);   opacity: 1; }
+  100% { transform: perspective(900px) rotateY(-90deg); opacity: 0; }
+}
+
+@keyframes pb-fold-in {
+  0%   { transform: perspective(900px) rotateY(90deg);  opacity: 0; }
+  100% { transform: perspective(900px) rotateY(0deg);   opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  @keyframes pb-fold-out {
+    0%   { transform: perspective(600px) rotateX(0deg);   opacity: 1; }
+    100% { transform: perspective(600px) rotateX(-90deg); opacity: 0; }
+  }
+  @keyframes pb-fold-in {
+    0%   { transform: perspective(600px) rotateX(90deg);  opacity: 0; }
+    100% { transform: perspective(600px) rotateX(0deg);   opacity: 1; }
+  }
+}
+
+.pb-front-inner {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.75rem 1.25rem;
+  gap: 1rem;
+}
+
+@media (min-width: 769px) {
+  .pb-front-inner {
+    padding: 2.25rem 2.5rem 1.5rem;
+  }
+}
+
+.pb-tag {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--color-amber);
+  opacity: 0.75;
+  margin-bottom: 0.6rem;
+}
+
+.pb-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 3vw, 1.65rem);
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+.pb-body {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+  max-width: 540px;
+}
+
+.pb-note {
+  margin-top: 0.7rem;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--color-text-faint);
+}
+
+.pb-stitch {
+  height: 1px;
+  width: 100%;
+  opacity: 0.55;
+  margin-top: 1.25rem;
+}
+
+/* Card footer row */
+.pb-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.75rem 1rem;
+}
+
+@media (min-width: 769px) {
+  .pb-card-foot {
+    padding: 0.75rem 2.5rem 1.25rem;
+  }
+}
+
+.pb-counter {
+  font-family: monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--color-text-faint);
+}
+
+.pb-tap-hint {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-amber);
+  opacity: 0.5;
+}
+
+.pb-file-no {
+  font-family: monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  opacity: 0.7;
+}
+
+/* Dot navigation */
+.pb-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+  list-style: none;
+  padding: 0;
+}
+
+.pb-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-text-faint);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: background 0.2s, transform 0.2s, opacity 0.2s;
+}
+
+.pb-dot:hover {
+  opacity: 0.7;
+  transform: scale(1.3);
+}
+
+.pb-dot--active {
+  background: var(--color-amber);
+  opacity: 1;
+  transform: scale(1.2);
+}
+
 /* ── About ── */
 
 .about-section {
@@ -1254,6 +1792,8 @@ a {
   max-width: 480px;
   margin: 2rem auto;
   overflow: visible;
+  will-change: opacity;
+  transition: none;
 }
 
 .suit-spec-closer {
@@ -1419,16 +1959,6 @@ a {
   width: 120%;
   transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: 1.5s;
-}
-
-@media (max-width: 768px) {
-  /* Fill viewport height and center content so no dead space below the blueprint */
-  #suit-spec {
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
 }
 
 @media (max-width: 768px) {
@@ -2253,6 +2783,17 @@ a {
     bottom: 0;
   }
 
+  /* Scale fill: mobile track is taller (bottom:0) vs desktop (bottom:6rem).
+     K=0.95 calibrated for ~620px mobile track so fill meets each dot. */
+  .stitch-track::after {
+    height: calc(var(--fill-height, 0%) * 0.91);
+  }
+
+  /* Dots always render above the fill line */
+  .stitch-dot {
+    z-index: 2;
+  }
+
   .contact-form {
     padding-left: 1.5rem;
   }
@@ -2267,11 +2808,11 @@ a {
     margin-bottom: 0.25rem;
   }
 
-  /* Recalibrate dots to align with each step's label row on mobile */
+  /* Recalibrate dots for mobile: positions match where fill stops at K=0.95 */
   .stitch-dot:nth-child(2) { top: 2.4rem; }
-  .stitch-dot:nth-child(3) { top: 10rem; }
-  .stitch-dot:nth-child(4) { top: 17.6rem; }
-  .stitch-dot:nth-child(5) { top: 27.5rem; }
+  .stitch-dot:nth-child(3) { top: 11rem; }
+  .stitch-dot:nth-child(4) { top: 19rem; }
+  .stitch-dot:nth-child(5) { top: 27rem; }
 
   .contact-submit {
     align-self: stretch;
@@ -2428,7 +2969,7 @@ a {
   }
 
   .section-wrapper {
-    padding: 3.5rem 1.25rem;
+    padding: 2rem 1.25rem;
   }
 
   /* Services: mobile layout */
@@ -2439,22 +2980,28 @@ a {
 
   .services-pattern {
     flex-direction: column;
-    perspective: none;
+    perspective: 700px;
     overflow: visible;
   }
 
+  /* Pattern-book flip: panel hinges at its top edge (where the fold line
+     sits) and falls open downward — like a weighted album page releasing.
+     Opacity leads the transform so the panel is visible while it's still
+     in motion; the overshoot easing gives the light bounce of a page settling. */
   .service-panel {
     flex: none;
     overflow: visible;
+    transform-style: preserve-3d;
+    transform-origin: top center;
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: rotateX(-90deg);
+    transition: opacity 0.35s ease,
+                transform 1.1s cubic-bezier(0.34, 1.08, 0.64, 1);
   }
 
   .service-panel.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: rotateX(0deg);
   }
 
   .panel-inner {
@@ -2466,13 +3013,13 @@ a {
     border-left: none;
   }
 
-  /* Fold lines become horizontal dividers on mobile */
+  /* Fold lines are the spine — horizontal dividers that anchor each flip */
   .fold-line {
     flex: 0 0 auto;
     height: 1px;
     width: 100%;
     align-self: auto;
-    opacity: 0.3;
+    opacity: 0.45;
     margin: 0.5rem 0;
   }
 
@@ -2506,6 +3053,7 @@ a {
 
   .about-layout {
     flex-direction: column;
+    gap: 0rem;
   }
 
   .about-photo {
@@ -2516,29 +3064,241 @@ a {
   .about-photo-placeholder {
     width: 100%;
     max-width: 320px;
+    height: 480px;
   }
 
-  .nav {
-    padding: 0.7rem 1rem;
+  /* ── Desktop rail nav: hidden on mobile, replaced by mobile-nav-bar ── */
+  .pattern-bar { display: none; }
+
+  /* ── Mobile Nav — top bar + slide-in drawer ── */
+
+  /* Top bar */
+  .mobile-nav-bar {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    z-index: 1000;
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    border-bottom: 1px solid var(--color-amber-dim);
+    padding: 0 1.25rem;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
-  /* Hide wordmark on mobile — monogram alone carries the mark */
-  .nav-logo-text {
-    display: none;
+  /* Monogram — cartouche box matching desktop pattern-bar style */
+  .mobile-nav-monogram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--color-amber);
+    background: var(--color-amber-trace);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    text-decoration: none;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .mobile-nav-mono-m { color: var(--color-amber); }
+
+  /* Current section label — center */
+  .mobile-nav-current {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    padding: 0 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  /* 5 links don't fit at 375px — hide "Get Fitted" (hero CTA covers it) */
-  .nav-links li:nth-child(4) {
-    display: none;
+  /* Toggle button — always right-aligned; margin-left: auto ensures this
+     even when .mobile-nav-current is absent (no active section at hero) */
+  .mobile-nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 4px;
+    flex-shrink: 0;
+    margin-left: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-nav-toggle span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--color-text);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.2s ease,
+                background 0.2s ease;
+    transform-origin: center;
+  }
+  .mobile-nav-toggle.open span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+    background: var(--color-amber);
+  }
+  .mobile-nav-toggle.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .mobile-nav-toggle.open span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+    background: var(--color-amber);
   }
 
-  .nav-links {
-    gap: 1.1rem;
+  /* Drawer — slides in from right */
+  .mobile-nav-drawer {
+    position: fixed;
+    top: 52px;
+    right: 0;
+    bottom: 0;
+    width: min(280px, 85vw);
+    z-index: 999;
+    background: var(--color-bg-elevated);
+    border-left: 1px solid var(--color-divider);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* Glen plaid texture — matches the contact section fabric */
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0,
+        transparent 11px,
+        color-mix(in srgb, var(--color-text-faint) 8%, transparent) 11px,
+        color-mix(in srgb, var(--color-text-faint) 8%, transparent) 12px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent 11px,
+        color-mix(in srgb, var(--color-text-faint) 8%, transparent) 11px,
+        color-mix(in srgb, var(--color-text-faint) 8%, transparent) 12px
+      );
+  }
+  .mobile-nav-drawer.open {
+    transform: translateX(0);
   }
 
-  .nav-link {
+  .mobile-nav-drawer ul {
+    list-style: none;
+    padding: 1.5rem 0 0;
+    margin: 0;
+    flex: 1;
+  }
+
+  /* Section items */
+  .mobile-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 1.5rem;
+    text-decoration: none;
+    color: var(--color-text-faint);
+    border-bottom: 1px solid var(--color-divider);
+    transition: color 0.2s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-nav-item:active {
+    background: var(--color-amber-trace);
+  }
+  .mobile-nav-item.active {
+    color: var(--color-text);
+    background: var(--color-amber-trace);
+    border-left: 2px solid var(--color-amber);
+    padding-left: calc(1.5rem - 2px);
+  }
+
+  .mobile-nav-item-num {
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--color-amber);
+    opacity: 0.55;
+    min-width: 1.6rem;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+  .mobile-nav-item.active .mobile-nav-item-num { opacity: 1; }
+
+  .mobile-nav-item-stub {
+    flex: 0 0 20px;
+    height: 1px;
+    background: var(--color-divider);
+    flex-shrink: 0;
+  }
+  .mobile-nav-item.active .mobile-nav-item-stub {
+    background: var(--color-amber-dim);
+  }
+
+  .mobile-nav-item-label {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  /* Footer fraction */
+  .mobile-nav-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--color-divider);
+    flex-shrink: 0;
+  }
+  .mobile-nav-footer-fraction {
+    font-family: var(--font-body);
     font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--color-amber);
   }
+  .mobile-nav-footer-tag {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+  }
+
+  /* Scrim */
+  .mobile-nav-scrim {
+    position: fixed;
+    top: 52px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 998;
+    background: color-mix(in srgb, var(--color-bg) 55%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Offset content below the fixed bar */
+  body { padding-top: 52px; }
 
   /* ── Fitting Room eyebrow + tape-rule ── */
   .fitting-eyebrow {
@@ -2683,6 +3443,33 @@ html.theme-blueprint {
 
   .services-cta {
     opacity: 0.7;
+  }
+
+  /* Pattern book: skip flip animation, content swaps instantly */
+  .pb-card--out,
+  .pb-card--in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Architecture diagrams: show statically, no draw animation */
+  .case-card-diagram .arch-g1 line,
+  .case-card-diagram .arch-g1 circle,
+  .case-card-diagram .arch-g1 path,
+  .case-card-diagram .arch-g1 rect,
+  .case-card-diagram .arch-g2 line,
+  .case-card-diagram .arch-g2 circle,
+  .case-card-diagram .arch-g2 path,
+  .case-card-diagram .arch-g2 rect {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+
+  .case-card-diagram .arch-g3 {
+    opacity: 0.85 !important;
+    transition: none !important;
   }
 
   .closer-fade {
@@ -2972,4 +3759,66 @@ html.theme-blueprint {
   .footer::before {
     opacity: 0.5;
   }
+}
+
+
+/* ── Pin Release Buffer ── */
+/* Non-pinned spacer between Suit Spec and Services. Forces a scroll-frame
+   gap between the two adjacent pin:true ScrollTriggers so they cannot share
+   a frame during the handoff. The eyebrow gives the user a visual beat. */
+
+.pin-release-buffer {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem;
+}
+
+.pin-release-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  opacity: 0;
+  animation: pin-release-fade 1s ease forwards;
+  animation-timeline: view();
+  animation-range: cover 20% cover 60%;
+}
+
+@supports not (animation-timeline: view()) {
+  .pin-release-eyebrow {
+    opacity: 0.6;
+    animation: none;
+  }
+}
+
+.pin-release-rule {
+  width: 4rem;
+  height: 1px;
+  background: var(--color-amber);
+  opacity: 0.35;
+}
+
+.pin-release-label {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: var(--color-amber);
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+@keyframes pin-release-fade {
+  to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .pin-release-buffer {
+    min-height: auto;
+    padding: 2rem 1.5rem;
+  }
+  .pin-release-rule { width: 2rem; }
+  .pin-release-label { font-size: 0.65rem; letter-spacing: 0.22em; }
 }

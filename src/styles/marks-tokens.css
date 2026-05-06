@@ -1,0 +1,77 @@
+/* ============================================================
+   Marks tokens — primitive layer. Pure values, no aliases.
+   See docs/marks-kit/01-audit.md for derivation.
+   Wrapped in @layer base so Tailwind utilities can override
+   if a consumer ever needs to.
+   ============================================================ */
+@layer base {
+  :root {
+    /* Stroke widths */
+    --mark-stroke-hairline: 0.3px;
+    --mark-stroke-fine: 0.5px;
+    --mark-stroke-regular: 1px;
+
+    /* Opacities */
+    --mark-opacity-faint: 0.12;
+    --mark-opacity-quiet: 0.3;
+    --mark-opacity-default: 0.5;
+    --mark-opacity-emphasis: 0.7;
+    --mark-opacity-anchor: 0.95;
+
+    /* Faded rule (A1 + E1, AR-4 outcome b) */
+    --mark-rule-faded-stroke: 1px;
+    --mark-rule-faded-opacity-deep: 0.55;       /* A1 hero */
+    --mark-rule-faded-opacity-quiet: 0.15;      /* E1 crease */
+    --mark-rule-faded-mask-inset-h: 8%;         /* A1 horizontal end-fade */
+    --mark-rule-faded-mask-inset-v: 12%;        /* E1 vertical end-fade */
+
+    /* Tape-rule (A3 + A4, AR-1 outcome a) */
+    --mark-tape-rule-tick-major: 20px;
+    --mark-tape-rule-tick-minor: 10px;
+    --mark-tape-rule-tick-svg: 32px;            /* SVG diagram rhythm */
+
+    /* Stitches (B family, AR-2 outcome a — B3 canonical) */
+    --mark-stitch-basting-on: 14px;
+    --mark-stitch-basting-off: 14px;
+    --mark-stitch-running-on: 6px;
+    --mark-stitch-running-off: 4px;
+    --mark-stitch-overlock-segment: 10px 2px 10px 4px;  /* documentation only — see Phase 3 */
+    --mark-stitch-topstitch-on: 2px;            /* AR-3 redraw */
+    --mark-stitch-topstitch-off: 1px;
+    --mark-stitch-backstitch-on: 8px;
+    --mark-stitch-backstitch-off: 3px;
+
+    /* Punctuation dot (C1) */
+    --mark-dot-punct-size: 4px;
+    --mark-dot-punct-opacity: 0.7;
+
+    /* State dot (C2) — consumed by contact-form.css */
+    --mark-dot-state-size: 7px;
+    --mark-dot-state-opacity-default: 0.6;
+    --mark-dot-state-opacity-focused: 0.85;
+    --mark-dot-state-opacity-active: 1;
+    --mark-dot-state-pulse-duration: 1.6s;
+
+    /* Ledger rule (E3) */
+    --mark-ledger-stroke: 0.3px;
+    --mark-ledger-opacity: 0.12;
+
+    /* Strikethrough (E4 — recorded only, not promoted per SF-2) */
+    --mark-strike-stroke: 0.4px;
+    --mark-strike-opacity: 0.3;
+
+    /* Registration / anchor / corner (D family) */
+    --mark-registration-radius: 3.5;
+    --mark-registration-cross-length: 12;
+    --mark-registration-stroke: 0.5;
+    --mark-registration-opacity: 0.6;
+    --mark-corner-leg-length: 8;
+    --mark-corner-stroke: 0.5;
+    --mark-corner-opacity: 0.4;
+    --mark-anchor-radius-outer: 6;
+    --mark-anchor-radius-dot: 1.2;
+    --mark-anchor-cross-length: 18;
+    --mark-anchor-stroke: 1;
+    --mark-anchor-opacity: 0.95;
+  }
+}
