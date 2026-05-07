@@ -691,8 +691,14 @@ export function initBlueprint() {
       end: "+=400%",
       pin: true,
       scrub: 0.5,
+      onLeave: () => {
+        // The scrub lag (0.5s) means elements may be at partial opacity when the
+        // pin releases. Jump to progress=1 instantly so the reflow frame is
+        // invisible (opacity:0 on all elements, shows plain --color-bg).
+        if (timeline) timeline.progress(1);
+      },
       onUpdate: (self) => {
-        const shouldEnable = self.progress >= 0.98;
+        const shouldEnable = self.progress >= 0.92 && self.progress < 0.96;
         const isEnabled = container.classList.contains("blueprint-hover-active");
 
         if (shouldEnable && !isEnabled) {
@@ -785,7 +791,7 @@ export function initBlueprint() {
     }, t + 0.2);
   });
 
-  // ── Phase 3: Closer fades in + hold ──
+  // ── Phase 3: Closer fades in ──
 
   const closer = section.querySelector(".suit-spec-closer");
   if (closer) {
@@ -796,8 +802,29 @@ export function initBlueprint() {
     }, 9.2);
   }
 
-  // Hold at end (spacer to extend timeline)
-  timeline.to({}, { duration: 0.5 }, 10);
+  // ── Phase 4: Exit fade — blueprint + all garment chrome fade together ──
+  // Runs t=10.0→10.5 (final ~5% of timeline). The pin spacer is 400% of
+  // viewport, so this is the last ~20vh of scroll inside the pin window.
+  // Chrome elements (header, footer, crease, tag, heading) are included so
+  // they don't "materialize" perceptually when the blueprint clears.
+  const docHeader = section.querySelector(".garment-doc-header");
+  const docFooter = section.querySelector(".garment-doc-footer");
+  const docCrease = section.querySelector(".garment-doc-crease");
+  const garmentTag = section.querySelector(".garment-tag");
+  const sectionHeading = section.querySelector(".section-heading");
+
+  timeline.to(
+    [container, closer, docHeader, docFooter, docCrease, garmentTag, sectionHeading].filter(Boolean),
+    {
+      opacity: 0,
+      duration: 0.5,
+      ease: "power1.in",
+    },
+    10
+  );
+
+  // Hold at end
+  timeline.to({}, { duration: 0.3 }, 10.5);
 }
 
 export function cleanupBlueprint() {
