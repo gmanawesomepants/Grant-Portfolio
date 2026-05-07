@@ -41,10 +41,6 @@
     --mark-stitch-backstitch-on: 8px;
     --mark-stitch-backstitch-off: 3px;
 
-    /* Punctuation dot (C1) */
-    --mark-dot-punct-size: 4px;
-    --mark-dot-punct-opacity: 0.7;
-
     /* State dot (C2) — consumed by contact-form.css */
     --mark-dot-state-size: 7px;
     --mark-dot-state-opacity-default: 0.6;
