@@ -244,7 +244,7 @@ function render() {
         junctionGlows[i].setAttribute("r", `${3 * scale}`);
         // Chapter label opacity — ambient 0.30, peaks at 0.70
         if (chapterWrappers[i]) {
-          chapterWrappers[i].style.opacity = `${0.30 + proximity * 0.40}`;
+          chapterWrappers[i].style.opacity = `${0.45 + proximity * 0.40}`;
         }
       }
     },
@@ -271,15 +271,15 @@ function render() {
       white-space: nowrap;
       z-index: 5;
       color: var(--color-amber);
-      opacity: 0.35;
+      opacity: 0.45;
       transition: opacity 0.3s ease;
     `;
 
     if (iconKey) {
       const iconSvg = document.createElementNS(svgNS, "svg");
       iconSvg.setAttribute("viewBox", "0 0 22 22");
-      iconSvg.setAttribute("width", "12");
-      iconSvg.setAttribute("height", "12");
+      iconSvg.setAttribute("width", "16");
+      iconSvg.setAttribute("height", "16");
       iconSvg.setAttribute("aria-hidden", "true");
       iconSvg.style.cssText = `flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 0.85; stroke-linecap: round; stroke-linejoin: round;`;
       iconSvg.innerHTML = buildIconSVGInnerHTML(iconKey);
