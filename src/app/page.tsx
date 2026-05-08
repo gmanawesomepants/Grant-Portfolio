@@ -1108,15 +1108,42 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="about-photo">
-            <div className="about-photo-placeholder">
-              <div className="about-photo-pin" />
-              {/* <img src="/portrait.jpg" alt="Grant Mahn" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> */}
-            </div>
-            <div className="about-photo-tag">
-              <div className="garment-tag">Grant Mahn · Founder</div>
-            </div>
-          </div>
+          <figure className="fabric-piece" aria-label="Portrait of Grant Mahn">
+            <svg
+              className="fabric-photo"
+              viewBox="0 0 320 400"
+              preserveAspectRatio="xMidYMid slice"
+            >
+              <g transform="scale(320, 400)">
+                <g clipPath="url(#fabricEdge)">
+                  <rect x="0" y="0" width="1" height="1" fill="#0e0a06" />
+                  <image
+                    href="/images/about/grant-portrait.jpg"
+                    x="0"
+                    y="0"
+                    width="1"
+                    height="1"
+                    preserveAspectRatio="xMidYMid slice"
+                  />
+                </g>
+                <use
+                  href="#fabricEdgeStroke"
+                  fill="none"
+                  stroke="var(--color-amber)"
+                  strokeOpacity="0.5"
+                  strokeWidth="0.0025"
+                  strokeLinejoin="miter"
+                />
+              </g>
+            </svg>
+            <span className="fabric-pin-thread" aria-hidden="true" />
+            <span className="fabric-pin" aria-hidden="true" />
+            <figcaption className="fabric-tag">
+              <span className="fabric-tag-text">
+                Grant Mahn<span className="punct">&middot;</span>Systems Tailor
+              </span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
