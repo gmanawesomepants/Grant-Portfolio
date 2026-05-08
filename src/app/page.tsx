@@ -811,6 +811,7 @@ export default function Home() {
       {/* ── 1. HERO ── */}
       <section id="top" className={`hero hero-stage-${loadStage}`}>
         <div className="hero-pinstripes" aria-hidden="true" />
+        <div className="hero-cutting-grid" aria-hidden="true" />
         <HeroVideo />
         <div className="hero-breathing" />
         <ParticleCanvas visible={loadStage >= 2} />
@@ -856,7 +857,7 @@ export default function Home() {
             <div className="case-card-meta">
               <div className="case-category-row">
                 {CATEGORY_ICONS['AI ORCHESTRATION'] && (
-                  <AtelierIcon name={CATEGORY_ICONS['AI ORCHESTRATION']} size={14} className="case-category-icon" />
+                  <AtelierIcon name={CATEGORY_ICONS['AI ORCHESTRATION']} size={16} className="case-category-icon" />
                 )}
                 <span className="case-card-category">AI ORCHESTRATION</span>
               </div>
@@ -890,7 +891,7 @@ export default function Home() {
             <div className="case-card-meta">
               <div className="case-category-row">
                 {CATEGORY_ICONS['FULL-STACK BUILD'] && (
-                  <AtelierIcon name={CATEGORY_ICONS['FULL-STACK BUILD']} size={14} className="case-category-icon" />
+                  <AtelierIcon name={CATEGORY_ICONS['FULL-STACK BUILD']} size={16} className="case-category-icon" />
                 )}
                 <span className="case-card-category">FULL-STACK BUILD</span>
               </div>
@@ -925,7 +926,7 @@ export default function Home() {
             <div className="case-card-meta">
               <div className="case-category-row">
                 {CATEGORY_ICONS['BRAND & OPERATIONS'] && (
-                  <AtelierIcon name={CATEGORY_ICONS['BRAND & OPERATIONS']} size={14} className="case-category-icon" />
+                  <AtelierIcon name={CATEGORY_ICONS['BRAND & OPERATIONS']} size={16} className="case-category-icon" />
                 )}
                 <span className="case-card-category">BRAND &amp; OPERATIONS</span>
               </div>
