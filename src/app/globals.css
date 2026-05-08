@@ -1050,6 +1050,19 @@ a {
   opacity: 0.5;
 }
 
+.case-category-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.case-category-icon {
+  color: var(--color-amber);
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
 .case-card-category {
   font-family: var(--font-body);
   font-size: 0.66rem;
@@ -1057,7 +1070,7 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: var(--color-amber);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .case-card-title {

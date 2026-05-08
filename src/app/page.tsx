@@ -4,8 +4,17 @@ import { useEffect, useState, useRef } from "react";
 import { initThread, cleanupThread } from "@/animations/thread";
 import { initBlueprint, cleanupBlueprint } from "@/animations/suitBlueprint";
 import { initContactReveal, cleanupContactReveal } from "@/animations/contactReveal";
-import { initServicesUnfold, cleanupServicesUnfold } from "@/animations/servicesUnfold";
 import FittingRoom from "@/components/FittingRoom";
+import PatternBook from "@/components/PatternBook";
+import { DiagramOrchestration, DiagramFullStack, DiagramGradingGrid } from "@/components/case-diagrams";
+import { AtelierIcon } from "@/components/icons/AtelierIcon";
+import type { IconName } from "@/icons/paths";
+
+const CATEGORY_ICONS: Record<string, IconName> = {
+  'AI ORCHESTRATION': 'node',
+  'FULL-STACK BUILD':  'grid',
+  'BRAND & OPERATIONS': 'grading',
+};
 
 /* ── Configuration ── */
 
@@ -355,35 +364,314 @@ function LiveClock({ stageVisible }: { stageVisible: boolean }) {
   );
 }
 
-/* ── Nav ── */
+/* ── Nav (Pattern Bar — vertical tape-rule) ── */
+
+const NAV_SECTIONS = [
+  { id: "work", num: "01", label: "Pattern Book" },
+  { id: "services", num: "02", label: "Services" },
+  { id: "about", num: "03", label: "About" },
+  { id: "fitting-room", num: "04", label: "Get Fitted" },
+  { id: "contact", num: "05", label: "Contact" },
+] as const;
 
 function Nav() {
-  const [visible, setVisible] = useState(false);
+  const [activeId, setActiveId] = useState<string>("");
+  const [engaged, setEngaged] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [markerTop, setMarkerTop] = useState(0);
+
+  const navRef = useRef<HTMLElement>(null);
+  // Tick centers: cached once after first paint (nav is fixed — they never move)
+  const tickCentersRef = useRef<number[]>([]);
 
   useEffect(() => {
-    function onScroll() {
-      setVisible(window.scrollY > window.innerHeight * 0.45);
+    // ── Cache tick centers once (they don't move) ─────────────────────────
+    // Must run after first paint so the fixed nav is laid out.
+    function cacheTicks() {
+      if (!navRef.current) return;
+      const els = navRef.current.querySelectorAll<HTMLElement>(".pattern-bar-tick");
+      tickCentersRef.current = Array.from(els).map((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top + r.height / 2; // center of tick (accounts for translateY(-50%))
+      });
     }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // ── Main update: fresh section positions on every scroll event ────────
+    //
+    // WHY fresh instead of cached:
+    // PatternBook (services section) uses GSAP pin:true, inserting a multi-viewport
+    // spacer that pushes #about and #fitting-room down. Caching at mount captures
+    // pre-spacer positions, making those sections wrong by ~2000px.
+    // Reading live via getBoundingClientRect() + scrollY costs ~0.05ms per event
+    // (5 elements, browsers coalesce to one reflow) — negligible.
+    function update() {
+      const scrollY = window.scrollY;
+      const vh = window.innerHeight;
+
+      setEngaged(scrollY > vh * 0.8);
+
+      // Live positions — immune to GSAP spacers, FittingRoom height changes, etc.
+      const tops = NAV_SECTIONS.map((s) => {
+        const el = document.getElementById(s.id);
+        if (!el) return -1;
+        return el.getBoundingClientRect().top + scrollY;
+      });
+      if (tops.some((t) => t < 0)) return;
+
+      // Detection point: 40% from viewport top.
+      // Less than 50% (center) so short sections like About activate promptly
+      // when their content is clearly dominant, not only when their top hits midscreen.
+      const detect = scrollY + vh * 0.4;
+
+      // Before the first section — nothing active
+      if (detect < tops[0]) {
+        setActiveId("");
+        if (tickCentersRef.current.length > 0) setMarkerTop(tickCentersRef.current[0]);
+        return;
+      }
+
+      // Last section whose top is at or above the detection point
+      let idx = 0;
+      for (let i = tops.length - 1; i >= 0; i--) {
+        if (tops[i] <= detect) { idx = i; break; }
+      }
+
+      setActiveId(NAV_SECTIONS[idx].id);
+
+      // Progress 0→1 from this section's start to the next section's start
+      const segStart = tops[idx];
+      const segEnd =
+        idx + 1 < tops.length
+          ? tops[idx + 1]
+          : document.documentElement.scrollHeight;
+      const p = Math.max(0, Math.min(1, (detect - segStart) / (segEnd - segStart)));
+
+      // Marker: interpolate between tick centers; clamp on last tick
+      const ticks = tickCentersRef.current;
+      if (ticks.length > 0) {
+        const from = ticks[idx] ?? 0;
+        const to   = ticks[Math.min(idx + 1, NAV_SECTIONS.length - 1)] ?? from;
+        setMarkerTop(from + p * (to - from));
+      }
+    }
+
+    function onResize() {
+      cacheTicks(); // nav might reflow on resize
+      update();
+    }
+
+    // rAF ensures GSAP spacers from PatternBook (mounted after Nav) are in the
+    // DOM before we read tick positions
+    requestAnimationFrame(() => {
+      cacheTicks();
+      update();
+    });
+
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
+
   return (
-    <nav className={`nav ${visible ? "visible" : ""}`}>
-      <a href="#top" className="nav-logo" aria-label={`${CONFIG.name} ${CONFIG.lastName} home`}>
-        <span className="nav-monogram" aria-hidden="true">
-          <span className="nav-monogram-gm">G<span className="nav-monogram-m">M</span></span>
-        </span>
-        <span className="nav-logo-text">{CONFIG.name} {CONFIG.lastName}</span>
-      </a>
-      <ul className="nav-links">
-        <li><a href="#work" className="nav-link">Pattern Book</a></li>
-        <li><a href="#services" className="nav-link">Services</a></li>
-        <li><a href="#about" className="nav-link">About</a></li>
-        <li><a href="#fitting-room" className="nav-link">Get Fitted</a></li>
-        <li><a href="#contact" className="nav-link">Contact</a></li>
-      </ul>
-    </nav>
+    <>
+      <nav
+        ref={navRef}
+        className={`pattern-bar${engaged ? " engaged" : ""}${drawerOpen ? " drawer-open" : ""}`}
+        aria-label="Sections"
+      >
+        {/* Monogram — anchors top */}
+        <a
+          href="#top"
+          className="pattern-bar-monogram"
+          aria-label={`${CONFIG.name} ${CONFIG.lastName} home`}
+        >
+          <span className="pattern-bar-mono-mark" aria-hidden="true">
+            <span className="pattern-bar-mono-gm">
+              G<span className="pattern-bar-mono-m">M</span>
+            </span>
+          </span>
+        </a>
+
+        {/* The rule */}
+        <div className="pattern-bar-rule" aria-hidden="true">
+          {Array.from({ length: 64 }).map((_, i) => (
+            <span
+              key={i}
+              className="pattern-bar-minor"
+              style={{ top: `${(i / 63) * 100}%` }}
+            />
+          ))}
+        </div>
+
+        {/* Major ticks — sections */}
+        <ul className="pattern-bar-ticks">
+          {NAV_SECTIONS.map((section, i) => {
+            const isActive = section.id === activeId;
+            const top = (i / (NAV_SECTIONS.length - 1)) * 100;
+            return (
+              <li
+                key={section.id}
+                className={`pattern-bar-tick${isActive ? " active" : ""}`}
+                style={{ top: `${top}%` }}
+              >
+                <a
+                  href={`#${section.id}`}
+                  className="pattern-bar-link"
+                  aria-current={isActive ? "true" : undefined}
+                >
+                  <span className="pattern-bar-num">{section.num}</span>
+                  <span className="pattern-bar-stub" aria-hidden="true" />
+                  <span className="pattern-bar-label">{section.label}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Brass marker — top is a px value set by JS from real tick positions */}
+        <span
+          className="pattern-bar-marker"
+          aria-hidden="true"
+          style={{ top: `${markerTop}px` }}
+        />
+
+        {/* Mobile: tap ribbon to open drawer */}
+        <button
+          type="button"
+          className="pattern-bar-tap"
+          aria-label="Open navigation"
+          onClick={() => setDrawerOpen((o) => !o)}
+        />
+      </nav>
+
+      {/* Mobile drawer scrim */}
+      {drawerOpen && (
+        <div
+          className="pattern-bar-scrim"
+          onClick={() => setDrawerOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+    </>
+  );
+}
+
+/* ── Mobile Nav (top bar + slide-in drawer, ≤768px only) ── */
+
+function MobileNav() {
+  const [open, setOpen] = useState(false);
+  const [activeId, setActiveId] = useState<string>("");
+
+  // Track active section (same logic as desktop Nav)
+  useEffect(() => {
+    function update() {
+      const scrollY = window.scrollY;
+      const vh = window.innerHeight;
+      const detect = scrollY + vh * 0.4;
+
+      const tops = NAV_SECTIONS.map((s) => {
+        const el = document.getElementById(s.id);
+        if (!el) return -1;
+        return el.getBoundingClientRect().top + scrollY;
+      });
+      if (tops.some((t) => t < 0)) return;
+
+      if (detect < tops[0]) { setActiveId(""); return; }
+
+      let idx = 0;
+      for (let i = tops.length - 1; i >= 0; i--) {
+        if (tops[i] <= detect) { idx = i; break; }
+      }
+      setActiveId(NAV_SECTIONS[idx].id);
+    }
+
+    requestAnimationFrame(update);
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+
+  // Lock body scroll while drawer is open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  const activeSection = NAV_SECTIONS.find((s) => s.id === activeId);
+
+  return (
+    <>
+      <header className="mobile-nav-bar">
+        <a href="#top" className="mobile-nav-monogram" aria-label="Go to top">
+          G<span className="mobile-nav-mono-m">M</span>
+        </a>
+
+        {activeSection && (
+          <span className="mobile-nav-current" aria-hidden="true">
+            {activeSection.label}
+          </span>
+        )}
+
+        <button
+          type="button"
+          className={`mobile-nav-toggle${open ? " open" : ""}`}
+          onClick={() => setOpen((o) => !o)}
+          aria-label={open ? "Close navigation" : "Open navigation"}
+          aria-expanded={open}
+          aria-controls="mobile-nav-drawer"
+        >
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </button>
+      </header>
+
+      <nav
+        id="mobile-nav-drawer"
+        className={`mobile-nav-drawer${open ? " open" : ""}`}
+        aria-label="Site sections"
+        aria-hidden={!open}
+      >
+        <ul>
+          {NAV_SECTIONS.map((section) => {
+            const isActive = section.id === activeId;
+            return (
+              <li key={section.id}>
+                <a
+                  href={`#${section.id}`}
+                  className={`mobile-nav-item${isActive ? " active" : ""}`}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive ? "true" : undefined}
+                >
+                  <span className="mobile-nav-item-num">{section.num}</span>
+                  <span className="mobile-nav-item-stub" aria-hidden="true" />
+                  <span className="mobile-nav-item-label">{section.label}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div className="mobile-nav-footer" aria-hidden="true">
+          <span className="mobile-nav-footer-fraction">
+            {activeSection?.num ?? "00"}&thinsp;/&thinsp;05
+          </span>
+          <span className="mobile-nav-footer-tag">Systems Tailor</span>
+        </div>
+      </nav>
+
+      {open && (
+        <div
+          className="mobile-nav-scrim"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+    </>
   );
 }
 
@@ -501,7 +789,6 @@ export default function Home() {
       initThread();
       initBlueprint();
       initContactReveal();
-      initServicesUnfold();
     }, 500);
 
     return () => {
@@ -509,7 +796,6 @@ export default function Home() {
       cleanupThread();
       cleanupBlueprint();
       cleanupContactReveal();
-      cleanupServicesUnfold();
     };
   }, []);
 
@@ -519,6 +805,7 @@ export default function Home() {
     <>
       <a href="#work" className="skip-to-content">Skip to content</a>
       <Nav />
+      <MobileNav />
       <CustomCursor />
 
       {/* ── 1. HERO ── */}
@@ -566,85 +853,105 @@ export default function Home() {
         <div className="stagger work-card-stack">
           {/* Card 1 */}
           <article className="case-card fade-in" tabIndex={0} aria-label="AI Orchestration Platform for Revenue Teams">
-            <span className="case-card-number">I/III</span>
-            <p className="case-card-category">AI ORCHESTRATION</p>
-            <h3 className="case-card-title">
-              AI Orchestration Platform for Revenue Teams
-            </h3>
-            <p className="case-card-desc">
-              Solo-designed and built an ML-driven platform that coordinates
-              existing sales tools — Apollo, Lemlist, HubSpot, Salesforce —
-              instead of replacing them. The system learns which outreach
-              approach works best for each prospect type and optimizes
-              automatically.
-            </p>
-            <p className="case-card-metrics">
-              37+ database tables<MetricDot />Thompson Sampling ML engine
-              <MetricDot />Behavioral clustering<MetricDot />15+ CRM
-              integrations<MetricDot />TypeScript/Prisma/Node.js
-              <MetricDot />Redis/BullMQ processing<MetricDot />ML model registry
-              with canary deployments<MetricDot />GDPR-compliant architecture
-              <MetricDot />Full CI/CD pipeline<MetricDot />5,300+ passing tests
-              <MetricDot />Kubernetes deployment
-            </p>
-            <p className="case-card-closer closer-fade">
-              Enterprise-grade system. One engineer. Currently in production.
-            </p>
+            <div className="case-card-meta">
+              <div className="case-category-row">
+                {CATEGORY_ICONS['AI ORCHESTRATION'] && (
+                  <AtelierIcon name={CATEGORY_ICONS['AI ORCHESTRATION']} size={12} className="case-category-icon" />
+                )}
+                <span className="case-card-category">AI ORCHESTRATION</span>
+              </div>
+              <span className="case-card-number">I/III</span>
+            </div>
+            <div className="case-card-diagram-wrap">
+              <DiagramOrchestration />
+            </div>
+            <div className="case-card-content">
+              <h3 className="case-card-title">
+                AI Orchestration Platform for Revenue Teams
+              </h3>
+              <p className="case-card-desc">
+                ML-driven platform that coordinates existing sales tools —
+                Apollo, Lemlist, HubSpot, Salesforce — instead of replacing
+                them. Learns which outreach works for each prospect type and
+                optimizes automatically.
+              </p>
+              <p className="case-card-closer closer-fade">
+                Enterprise-grade system. One engineer. Currently in production.
+              </p>
+              <p className="case-card-metrics">
+                TypeScript/Prisma/Node.js<MetricDot />Redis/BullMQ processing
+                <MetricDot />Kubernetes deployment<MetricDot />GDPR-compliant architecture
+              </p>
+            </div>
           </article>
 
           {/* Card 2 */}
           <article className="case-card fade-in" tabIndex={0} aria-label="Full-Stack AI Infrastructure — Early-Stage Startup">
-            <span className="case-card-number">II/III</span>
-            <p className="case-card-category">FULL-STACK BUILD</p>
-            <h3 className="case-card-title">
-              Full-Stack AI Infrastructure — Early-Stage Startup
-            </h3>
-            <p className="case-card-desc">
-              Designed and deployed the complete technical stack for a startup
-              entering the AI consulting space. Took the founder&apos;s concept
-              and turned it into a fully operational digital presence and
-              AI-powered product suite.
-            </p>
-            <p className="case-card-metrics">
-              Node.js/TypeScript full stack<MetricDot />Next.js frontend
-              <MetricDot />Strapi headless CMS<MetricDot />AI-powered
-              Infrastructure Analyzer<MetricDot />AI-powered Proposal Generator
-              <MetricDot />Persistent AI chat assistant<MetricDot />Custom intake
-              forms with Mailgun<MetricDot />Complete API layer with rate
-              limiting<MetricDot />Full DevOps pipeline<MetricDot />Custom
-              graphic design<MetricDot />5 pages, every endpoint
-            </p>
-            <p className="case-card-closer closer-fade">
-              Zero to production. Solo engineer. Every layer — backend, frontend,
-              AI, design, DevOps.
-            </p>
+            <div className="case-card-meta">
+              <div className="case-category-row">
+                {CATEGORY_ICONS['FULL-STACK BUILD'] && (
+                  <AtelierIcon name={CATEGORY_ICONS['FULL-STACK BUILD']} size={12} className="case-category-icon" />
+                )}
+                <span className="case-card-category">FULL-STACK BUILD</span>
+              </div>
+              <span className="case-card-number">II/III</span>
+            </div>
+            <div className="case-card-diagram-wrap">
+              <DiagramFullStack />
+            </div>
+            <div className="case-card-content">
+              <h3 className="case-card-title">
+                Full-Stack AI Infrastructure — Early-Stage Startup
+              </h3>
+              <p className="case-card-desc">
+                Built an AI-powered business intelligence platform end-to-end —
+                frontend, backend, two production AI tools, dashboard, and data
+                pipeline. Took the founder&apos;s concept to a fully operational
+                product suite.
+              </p>
+              <p className="case-card-closer closer-fade">
+                Zero to production. Solo engineer. Every layer — backend, frontend,
+                AI, design, DevOps.
+              </p>
+              <p className="case-card-metrics">
+                Persistent AI chat assistant<MetricDot />Custom intake forms with Mailgun
+                <MetricDot />Complete API layer with rate limiting<MetricDot />5 pages, every endpoint
+              </p>
+            </div>
           </article>
 
           {/* Card 3 */}
           <article className="case-card fade-in" tabIndex={0} aria-label="Brand Strategy &amp; Operations System — Premium Consumer Brand">
-            <span className="case-card-number">III/III</span>
-            <p className="case-card-category">BRAND &amp; OPERATIONS</p>
-            <h3 className="case-card-title">
-              Brand Strategy &amp; Operations System — Premium Consumer Brand
-            </h3>
-            <p className="case-card-desc">
-              Developed comprehensive go-to-market infrastructure for a premium
-              men&apos;s apparel brand, from market research to supply chain to
-              quality assurance.
-            </p>
-            <p className="case-card-metrics">
-              PMF Research Strategy<MetricDot />Supply Chain Audit Checklist
-              <MetricDot />Customer Discovery Script<MetricDot />Brand Identity
-              System<MetricDot />Sample Evaluation System (v3.4)
-              <MetricDot />Golden sample lock-in methodology<MetricDot />Extended
-              wear testing protocols<MetricDot />Tech pack specs with grading
-              deltas<MetricDot />Multi-tester validation framework
-              <MetricDot />Competitor benchmarking
-            </p>
-            <p className="case-card-closer closer-fade">
-              Not just strategy decks. Operational systems designed to ship
-              product.
-            </p>
+            <div className="case-card-meta">
+              <div className="case-category-row">
+                {CATEGORY_ICONS['BRAND & OPERATIONS'] && (
+                  <AtelierIcon name={CATEGORY_ICONS['BRAND & OPERATIONS']} size={12} className="case-category-icon" />
+                )}
+                <span className="case-card-category">BRAND &amp; OPERATIONS</span>
+              </div>
+              <span className="case-card-number">III/III</span>
+            </div>
+            <div className="case-card-diagram-wrap">
+              <DiagramGradingGrid />
+            </div>
+            <div className="case-card-content">
+              <h3 className="case-card-title">
+                Brand Strategy &amp; Operations System — Premium Consumer Brand
+              </h3>
+              <p className="case-card-desc">
+                Developed comprehensive go-to-market infrastructure for a premium
+                men&apos;s apparel brand, from market research to supply chain to
+                quality assurance.
+              </p>
+              <p className="case-card-closer closer-fade">
+                Not just strategy decks. Operational systems designed to ship
+                product.
+              </p>
+              <p className="case-card-metrics">
+                PMF Research Strategy<MetricDot />Brand Identity System
+                <MetricDot />Sample Evaluation System (v3.4)<MetricDot />Multi-tester validation framework
+              </p>
+            </div>
           </article>
         </div>
       </section>
@@ -706,6 +1013,7 @@ export default function Home() {
         </div>
       </section>
 
+
       {/* ── 4. TICKER ── */}
       <div className="ticker-section" aria-hidden="true">
         <div className="ticker-track">
@@ -719,55 +1027,7 @@ export default function Home() {
       <section id="services" className="section-wrapper">
         <div className="garment-tag tag-enter">SERVICES</div>
         <h2 className="section-heading clip-reveal">How I Work</h2>
-
-        <div className="services-pattern" style={{ marginTop: "2rem" }}>
-          <article className="service-panel panel-measure">
-            <div className="panel-inner" tabIndex={0} aria-label="AI Strategy Audit — measurement and roadmap">
-              <span className="service-phase">MEASURE</span>
-              <h3 className="service-title">AI Strategy Audit</h3>
-              <p className="service-body">
-                Every system starts with measurement. I assess your operations,
-                identify the 2–3 highest-ROI opportunities for AI, and deliver a
-                concrete roadmap. Not off-the-rack consulting — a pattern cut to
-                your business.
-              </p>
-              <p className="service-note">
-                Engagements start with a paid strategy audit.
-              </p>
-            </div>
-          </article>
-
-          <div className="fold-line fold-basting" aria-hidden="true" />
-
-          <article className="service-panel panel-cut">
-            <div className="panel-inner" tabIndex={0} aria-label="AI System Build — full construction and integration">
-              <span className="service-phase">CUT</span>
-              <h3 className="service-title">AI System Build</h3>
-              <p className="service-body">
-                Custom AI systems, cut from your requirements. The full
-                construction — orchestration, agents, infrastructure — stitched
-                into your existing operations. I don&apos;t hand you a demo and
-                disappear. I build until the fit is right.
-              </p>
-            </div>
-          </article>
-
-          <div className="fold-line fold-backstitch" aria-hidden="true" />
-
-          <article className="service-panel panel-fit">
-            <div className="panel-inner" tabIndex={0} aria-label="Managed AI / Retainer — ongoing optimization and support">
-              <span className="service-phase">FIT</span>
-              <h3 className="service-title">Managed AI / Retainer</h3>
-              <p className="service-body">
-                Every system needs alterations after the first wear. I stay for
-                monitoring, optimization, and new capabilities as your needs
-                evolve. A fractional AI architect on call — for a fraction of what
-                a full-time hire costs.
-              </p>
-            </div>
-          </article>
-        </div>
-        <a href="#contact" className="services-cta">Request a Fitting &rarr;</a>
+        <PatternBook />
       </section>
 
       {/* ── 6. ABOUT ── */}
