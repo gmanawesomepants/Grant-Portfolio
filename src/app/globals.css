@@ -1549,6 +1549,15 @@ a {
   transform-origin: left center;
 }
 
+.pb-card:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+}
+
+.pb-card:hover .pb-stitch {
+  opacity: 0.85;
+}
+
 .pb-card--out {
   animation: pb-fold-out 0.28s ease-in forwards;
   pointer-events: none;
@@ -1646,6 +1655,7 @@ a {
   width: 100%;
   opacity: 0.55;
   margin-top: 1.25rem;
+  transition: opacity 0.3s ease;
 }
 
 /* Card footer row */
