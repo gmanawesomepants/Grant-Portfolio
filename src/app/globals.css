@@ -1059,7 +1059,6 @@ a {
 
 .case-category-icon {
   color: var(--color-amber);
-  opacity: 0.65;
   flex-shrink: 0;
 }
 
