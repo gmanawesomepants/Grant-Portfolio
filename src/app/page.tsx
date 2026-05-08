@@ -1194,33 +1194,93 @@ export default function Home() {
 
       {/* ── 9. FOOTER ── */}
       <SectionDivider />
-      <footer className="footer">
-        <div className="footer-top">
-          <span className="footer-copy">© 2026 Grant Mahn<span className="footer-signature"> — GM</span></span>
-          <div className="footer-links">
-            <a href={CONFIG.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-            </a>
-            <a href={CONFIG.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-              </svg>
-            </a>
-            <a href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </a>
+      <footer className="footer" aria-labelledby="care-label-eyebrow">
+        <div className="footer-inner">
+
+          {/* Maker's mark — needle V3 from locked icon kit */}
+          <div className="footer-maker-mark" aria-hidden="true">
+            <AtelierIcon name="needle" size={30} className="footer-maker-mark-svg" />
           </div>
+
+          {/* Care label — the production artifact */}
+          <article className="care-label" aria-labelledby="care-label-eyebrow">
+            <div className="care-label-corners" aria-hidden="true" />
+
+            <header className="care-label-header">
+              <p id="care-label-eyebrow" className="care-label-eyebrow">
+                Care Label · Colophon
+              </p>
+              <p className="care-label-id" tabIndex={0} title="Build identifier">
+                SPEC-NO. 2026-GM-PB-03
+              </p>
+            </header>
+
+            <dl className="care-meta">
+              <dt className="care-meta-key">Authored</dt>
+              <dd className="care-meta-val care-meta-row">
+                <span className="care-meta-authored">
+                  <span className="accent">G·M</span>
+                  <span className="punct">·</span>
+                  San Diego, California
+                </span>
+              </dd>
+
+              <dt className="care-meta-key">Constructed</dt>
+              <dd className="care-meta-val">
+                End-to-end<span className="punct">·</span>0 templates<span className="punct">·</span>0 plugins
+              </dd>
+
+              <dt className="care-meta-key">Pattern Book</dt>
+              <dd className="care-meta-val">
+                Active<span className="punct">·</span>Revision 03<span className="punct">·</span>2026
+              </dd>
+
+              <dt className="care-meta-key">Status</dt>
+              <dd className="care-meta-val">
+                <span className="status-pulse" aria-hidden="true" />
+                In production<span className="punct">·</span>Tailored continuously
+              </dd>
+            </dl>
+
+            <div className="care-note">
+              <span className="care-note-line">Measured, cut, and stitched by hand.</span>
+              <span className="care-note-line">
+                Pattern Book · Spec sheets · Marks-kit primitives · Maintained as a working garment.
+              </span>
+            </div>
+          </article>
+
+          {/* Utility strip — copyright + minimized social */}
+          <div className="footer-utility">
+            <p className="footer-copyright">© 2026 Grant Mahn · All rights reserved</p>
+            <ul className="footer-social" role="list">
+              <li>
+                <a href={CONFIG.githubUrl} aria-label="GitHub profile" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.69-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.05 11.05 0 015.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.15 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z" />
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href={CONFIG.linkedinUrl} aria-label="LinkedIn profile" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 11.01-4.12 2.06 2.06 0 01-.01 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href={CONFIG.instagramUrl} aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+
         </div>
-        <p className="footer-handbuilt">
-          0 templates. 0 plugins. Handbuilt.
-        </p>
-        <p className="footer-colophon">
-          Measured, cut, and stitched by hand.
-        </p>
       </footer>
     </>
   );
