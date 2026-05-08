@@ -35,6 +35,8 @@ export function AtelierIcon({ name, size = 16, className, style }: AtelierIconPr
       <path
         d={ICON_PATHS[name]}
         strokeDasharray={isStitched ? "1.5 2.5" : undefined}
+        fill={name === 'needle' ? "currentColor" : "none"}
+        stroke={name === 'needle' ? "none" : "currentColor"}
       />
 
       {/* Shears — Phase 0 V5: two finger-loops at top + center pivot dot */}
@@ -46,9 +48,9 @@ export function AtelierIcon({ name, size = 16, className, style }: AtelierIconPr
         </>
       )}
 
-      {/* Needle — eye is stroke-only inner circle (works on any background) */}
+      {/* Needle — filled silhouette; eye uses --color-bg stroke (dark-bg contexts only) */}
       {name === 'needle' && (
-        <circle cx="11" cy="4.8" r="0.9" stroke="currentColor" fill="none" strokeWidth={0.85} />
+        <circle cx="11" cy="6.5" r="1.2" stroke="var(--color-bg)" fill="none" strokeWidth={0.85} />
       )}
 
       {/* Node — pin-mark nodes (filled, not stroked rings) */}

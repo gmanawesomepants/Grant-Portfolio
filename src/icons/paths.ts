@@ -72,9 +72,9 @@ export function buildIconSVGInnerHTML(name: IconName): string {
         <circle cx="11" cy="11" r="0.7" fill="currentColor" stroke="none" />`;
 
     case 'needle':
-      // Eye uses stroke-only inner circle — works on any background
-      return `${path}
-        <circle cx="11" cy="4.8" r="0.9" stroke="currentColor" fill="none" stroke-width="${sw}" />`;
+      // Filled silhouette; eye punches through with --color-bg stroke (dark-bg contexts only)
+      return `<path d="${ICON_PATHS[name]}" fill="currentColor" stroke="none" />
+        <circle cx="11" cy="6.5" r="1.2" stroke="var(--color-bg)" fill="none" stroke-width="${sw}" />`;
 
     case 'node':
       // Stitched dashed edges + pin-mark nodes (filled circles, not stroked rings)
