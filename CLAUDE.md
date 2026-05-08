@@ -171,7 +171,6 @@ Before completing ANY visual component, apply this test:
 These elements are locked. Do not modify without explicit approval:
 
 - The suit jacket SVG structure and its 3 animation groups
-- The needle-and-thread "t" logo in Italianno script
 - The Syne + Outfit font pairing
 - The wool/brass color relationship and token values (palette migrated 2026 — see Color System section)
 - The GSAP import and initialization patterns

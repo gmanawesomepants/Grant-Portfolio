@@ -65,6 +65,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${syne.variable} ${outfit.variable}`}>
+      <head>
+        <script
+          type="application/x-comment"
+          dangerouslySetInnerHTML={{
+            __html: '// Built with Next.js, React 19, TypeScript. Syne + Outfit. //'
+          }}
+        />
+      </head>
       <body>
         <ThemeProvider />
         {children}
