@@ -1,5 +1,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { buildIconSVGInnerHTML, type IconName } from '../icons/paths';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,6 +22,13 @@ const SECTION_LABELS: { sectionId: string; label: string }[] = [
 
 const BRANCH_LEN = 12;
 const MIN_VIEWPORT = 1300;
+
+const JUNCTION_ICONS: Record<string, IconName> = {
+  MEASURE: 'tape',
+  CUT:     'shears',
+  FIT:     'needle',
+  DELIVER: 'bobbin',
+};
 
 function getThreadX(): number {
   const wrapper = document.querySelector(".section-wrapper");
@@ -176,6 +184,7 @@ function render() {
   // Junction dots — pin pricks with glow
   const junctionDots: SVGCircleElement[] = [];
   const junctionGlows: SVGCircleElement[] = [];
+  const chapterWrappers: HTMLElement[] = [];
 
   for (const j of junctions) {
     const glow = document.createElementNS(svgNS, "circle");
@@ -233,36 +242,63 @@ function render() {
         const scale = 1 + proximity * 1.0;
         junctionDots[i].setAttribute("r", `${3 * scale}`);
         junctionGlows[i].setAttribute("r", `${3 * scale}`);
+        // Chapter label opacity — ambient 0.30, peaks at 0.70
+        if (chapterWrappers[i]) {
+          chapterWrappers[i].style.opacity = `${0.30 + proximity * 0.40}`;
+        }
       }
     },
   });
   triggers.push(st);
 
-  // Chapter labels — to the LEFT of the thread, rotated -90deg
+  // Chapter labels — icon + text wrapper, rotated -90deg
   junctions.forEach((j) => {
     if (!j.label) return;
+    const iconKey = JUNCTION_ICONS[j.label];
 
-    const label = document.createElement("div");
-    label.className = "thread-chapter-label";
-    label.textContent = j.label;
-    label.style.cssText = `
+    const wrapper = document.createElement("div");
+    wrapper.className = "thread-chapter-label";
+    wrapper.style.cssText = `
       position: absolute;
-      left: ${threadX - 16}px;
+      left: ${threadX - 27}px;
       top: ${j.y + 8}px;
-      font-family: var(--font-heading);
-      font-size: 0.55rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--color-amber);
-      opacity: 0.35;
+      display: flex;
+      align-items: center;
+      gap: 5px;
       transform: rotate(-90deg);
       transform-origin: left top;
       pointer-events: none;
       white-space: nowrap;
       z-index: 5;
+      color: var(--color-amber);
+      opacity: 0.35;
+      transition: opacity 0.3s ease;
     `;
-    document.body.appendChild(label);
+
+    if (iconKey) {
+      const iconSvg = document.createElementNS(svgNS, "svg");
+      iconSvg.setAttribute("viewBox", "0 0 22 22");
+      iconSvg.setAttribute("width", "12");
+      iconSvg.setAttribute("height", "12");
+      iconSvg.setAttribute("aria-hidden", "true");
+      iconSvg.style.cssText = `flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 0.85; stroke-linecap: round; stroke-linejoin: round;`;
+      iconSvg.innerHTML = buildIconSVGInnerHTML(iconKey);
+      wrapper.appendChild(iconSvg);
+    }
+
+    const textEl = document.createElement("span");
+    textEl.style.cssText = `
+      font-family: var(--font-heading);
+      font-size: 0.55rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    `;
+    textEl.textContent = j.label;
+    wrapper.appendChild(textEl);
+
+    document.body.appendChild(wrapper);
+    chapterWrappers.push(wrapper);
   });
 }
 
