@@ -3638,6 +3638,12 @@ a {
 
 }
 
+@media (max-width: 480px) {
+  .fabric-piece {
+    width: 200px;
+  }
+}
+
 @media (max-width: 1300px) {
   #thread-container,
   .thread-chapter-label {
@@ -3818,6 +3824,10 @@ html.theme-blueprint {
   #thread-container,
   .thread-chapter-label {
     display: none !important;
+  }
+
+  .fabric-piece {
+    transform: rotate(0deg);
   }
 }
 

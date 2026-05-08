@@ -78,7 +78,7 @@
 - The dark/amber color relationship
 - The garment-tag component styling
 - The fade-in / tag-enter animation class behavior
-- The rotate(1.5deg) photo tilt and pin treatment
+- The fabric-edge photo treatment (SVG clipPath pinking-shears silhouette, 5deg rotation, 0.5 amber outline, pin + thread, identification tag with corner marks)
 
 ## Dependencies
 - `src/app/globals.css` — all about-section styles
