@@ -1009,7 +1009,7 @@ a {
   width: 0;
   height: 1px;
   background: var(--color-amber);
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .case-card:hover {
@@ -1020,6 +1020,7 @@ a {
 .case-card:hover::before,
 .case-card:focus-visible::before {
   width: 100%;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .case-card:focus-visible {
