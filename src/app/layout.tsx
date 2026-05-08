@@ -69,7 +69,7 @@ export default function RootLayout({
         <script
           type="application/x-comment"
           dangerouslySetInnerHTML={{
-            __html: '// Built with Next.js, React 19, TypeScript. Syne + Outfit. //'
+            __html: '\n  Built with Next.js, React 19, TypeScript. Syne + Outfit.\n  Measured, cut, and stitched by hand.\n  '
           }}
         />
       </head>
