@@ -151,7 +151,7 @@ function render() {
 
   // ── Glow path — brighter overlay that lights up on scroll ──
   const glowPath = document.createElementNS(svgNS, "path");
-  glowPath.id = "thread-glow";
+  glowPath.id = "thread-glow-path";
   glowPath.setAttribute("d", mainD);
   glowPath.setAttribute("fill", "none");
   glowPath.setAttribute("stroke", "var(--color-amber)");

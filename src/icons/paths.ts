@@ -20,10 +20,9 @@ export const ICON_PATHS = {
   // Path = blade Vs only; loops + pivot dot rendered as supplemental shapes
   shears:  "M 7.4 6 L 11 11 L 5 19 M 14.6 6 L 11 11 L 17 19",
 
-  // Needle — FIT phase
-  // Slim body, wider than original candidate for cleaner 12px silhouette
+  // Needle — FIT phase (variant B locked: elongated ~1:8 ratio, slight right asymmetry)
   // Path = needle body silhouette; eye rendered as supplemental hollow circle
-  needle:  "M 11 3 L 13 11 L 11 19 L 9 11 Z",
+  needle:  "M 11 1.5 L 12.2 8 L 11 21 L 9.9 8 Z",
 
   // Bobbin — DELIVER phase
   // Spool flanges + walls + thread crossings
@@ -75,12 +74,12 @@ export function buildIconSVGInnerHTML(name: IconName): string {
     case 'needle':
       // Eye uses stroke-only inner circle — works on any background
       return `${path}
-        <circle cx="11" cy="6.5" r="1.2" stroke="currentColor" fill="none" stroke-width="${sw}" />`;
+        <circle cx="11" cy="4.8" r="0.9" stroke="currentColor" fill="none" stroke-width="${sw}" />`;
 
     case 'node':
       // Stitched dashed edges + pin-mark nodes (filled circles, not stroked rings)
-      // Override path's stroke-dasharray to render edges as basting stitches
-      return `<path d="${ICON_PATHS[name]}" stroke="currentColor" fill="none" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.5 2.5" />
+      // Parent SVG provides stroke/fill/strokeWidth; only dasharray is node-specific
+      return `<path d="${ICON_PATHS[name]}" stroke-dasharray="1.5 2.5" />
         <circle cx="11" cy="5" r="1.4" fill="currentColor" stroke="none" />
         <circle cx="5" cy="17" r="1.4" fill="currentColor" stroke="none" />
         <circle cx="17" cy="17" r="1.4" fill="currentColor" stroke="none" />`;

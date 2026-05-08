@@ -48,7 +48,7 @@ export function AtelierIcon({ name, size = 16, className, style }: AtelierIconPr
 
       {/* Needle — eye is stroke-only inner circle (works on any background) */}
       {name === 'needle' && (
-        <circle cx="11" cy="6.5" r="1.2" stroke="currentColor" fill="none" strokeWidth={0.85} />
+        <circle cx="11" cy="4.8" r="0.9" stroke="currentColor" fill="none" strokeWidth={0.85} />
       )}
 
       {/* Node — pin-mark nodes (filled, not stroked rings) */}
