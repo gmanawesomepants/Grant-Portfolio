@@ -3055,6 +3055,70 @@ a {
   }
 }
 
+/* ── Micro-interactions ── */
+
+/* SPEC-ID underline draw on dwell hover */
+.care-label-id::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 0;
+  background: var(--color-amber);
+  opacity: 0;
+  transition:
+    width 0.35s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
+    opacity 0.25s ease 0.4s;
+}
+
+.care-label-id:hover::after,
+.care-label-id:focus-visible::after {
+  width: 100%;
+  opacity: 0.5;
+}
+
+/* AUTHORED row letter-spacing widen on hover */
+.care-meta-val .accent {
+  transition: color 0.4s ease, letter-spacing 0.4s ease;
+}
+
+.care-meta-row:hover .accent {
+  letter-spacing: 0.04em;
+}
+
+/* Status pulse — always on */
+.status-pulse {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--color-amber);
+  margin-right: 0.45em;
+  vertical-align: 0.05em;
+  animation: status-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes status-breathe {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 1; }
+}
+
+/* Reduced motion — all footer micro-interactions off */
+@media (prefers-reduced-motion: reduce) {
+  .care-label,
+  .care-label-id::after,
+  .care-meta-val .accent,
+  .footer-social-link,
+  .footer-maker-mark {
+    transition: none !important;
+  }
+  .status-pulse {
+    animation: none !important;
+    opacity: 0.85;
+  }
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 768px) {
