@@ -1,6 +1,14 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { AtelierIcon } from '@/components/icons/AtelierIcon';
+import type { IconName } from '@/icons/paths';
+
+const TAG_ICONS: Record<string, IconName> = {
+  MEASURE: 'tape',
+  CUT:     'shears',
+  FIT:     'needle',
+};
 
 interface ServiceCard {
   tag: string;
@@ -118,7 +126,12 @@ export default function PatternBook() {
         >
           <div className="pb-front-inner">
             <div className="pb-front-top">
-              <p className="pb-tag">{card.tag}</p>
+              <div className="pb-tag-row">
+                {TAG_ICONS[card.tag] && (
+                  <AtelierIcon name={TAG_ICONS[card.tag]} size={13} className="pb-tag-icon" />
+                )}
+                <span className="pb-tag">{card.tag}</span>
+              </div>
               <h3 className="pb-title">{card.title}</h3>
             </div>
             <div className="pb-front-mid">

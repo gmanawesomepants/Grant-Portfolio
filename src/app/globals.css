@@ -1571,6 +1571,19 @@ a {
   }
 }
 
+.pb-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0.6rem;
+}
+
+.pb-tag-icon {
+  color: var(--color-amber);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
 .pb-tag {
   font-family: var(--font-body);
   font-size: 0.68rem;
@@ -1579,7 +1592,7 @@ a {
   letter-spacing: 0.25em;
   color: var(--color-amber);
   opacity: 0.75;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0;
 }
 
 .pb-title {
@@ -1866,6 +1879,7 @@ a {
 
 #suit-spec {
   position: relative;
+  background: var(--color-bg);
 }
 
 .garment-doc-crease {
@@ -3684,66 +3698,4 @@ html.theme-blueprint {
   .footer::before {
     opacity: 0.5;
   }
-}
-
-
-/* ── Pin Release Buffer ── */
-/* Non-pinned spacer between Suit Spec and Services. Forces a scroll-frame
-   gap between the two adjacent pin:true ScrollTriggers so they cannot share
-   a frame during the handoff. The eyebrow gives the user a visual beat. */
-
-.pin-release-buffer {
-  min-height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 1.5rem;
-}
-
-.pin-release-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  opacity: 0;
-  animation: pin-release-fade 1s ease forwards;
-  animation-timeline: view();
-  animation-range: cover 20% cover 60%;
-}
-
-@supports not (animation-timeline: view()) {
-  .pin-release-eyebrow {
-    opacity: 0.6;
-    animation: none;
-  }
-}
-
-.pin-release-rule {
-  width: 4rem;
-  height: 1px;
-  background: var(--color-amber);
-  opacity: 0.35;
-}
-
-.pin-release-label {
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.28em;
-  color: var(--color-amber);
-  opacity: 0.65;
-  white-space: nowrap;
-}
-
-@keyframes pin-release-fade {
-  to { opacity: 1; }
-}
-
-@media (max-width: 768px) {
-  .pin-release-buffer {
-    min-height: auto;
-    padding: 2rem 1.5rem;
-  }
-  .pin-release-rule { width: 2rem; }
-  .pin-release-label { font-size: 0.65rem; letter-spacing: 0.22em; }
 }
