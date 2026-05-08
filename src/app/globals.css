@@ -1800,33 +1800,91 @@ a {
   margin-top: 1.5rem;
 }
 
-.about-photo {
-  flex: 0 0 280px;
+/* ── About — fabric piece photo ── */
+.fabric-piece {
   position: relative;
+  flex: 0 0 auto;
+  width: 320px;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  transform: rotate(5deg);
+  transform-origin: center center;
+  padding-bottom: 72px;
 }
 
-.about-photo-placeholder {
-  width: 280px;
-  height: 380px;
-  background: var(--color-bg-elevated);
-  border-top: 2px solid var(--color-amber-dim);
-  transform: rotate(1.5deg);
-  position: relative;
+.fabric-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
 }
 
-.about-photo-pin {
+.fabric-pin {
   position: absolute;
   top: -3px;
-  left: 8px;
-  width: 5px;
-  height: 5px;
+  left: 12%;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--color-amber);
+  opacity: 0.9;
+  box-shadow: 0 0 8px rgba(212, 162, 76, 0.4);
+  z-index: 3;
+  pointer-events: none;
 }
 
-.about-photo-tag {
-  margin-top: 0.75rem;
-  transform: rotate(1.5deg);
+.fabric-pin-thread {
+  position: absolute;
+  top: -40px;
+  left: calc(12% + 3px);
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, rgba(212, 162, 76, 0.35));
+  z-index: 2;
+  pointer-events: none;
+}
+
+.fabric-tag {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 10, 6, 0.85);
+  border: 1px solid rgba(212, 162, 76, 0.32);
+  padding: 8px 16px;
+  white-space: nowrap;
+  z-index: 4;
+  margin: 0;
+}
+
+.fabric-tag::before,
+.fabric-tag::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background-image:
+    linear-gradient(rgba(212, 162, 76, 0.6), rgba(212, 162, 76, 0.6)),
+    linear-gradient(rgba(212, 162, 76, 0.6), rgba(212, 162, 76, 0.6));
+  background-size: 5px 1px, 1px 5px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.fabric-tag::before { top: -2.5px; left: -2.5px; }
+.fabric-tag::after  { bottom: -2.5px; right: -2.5px; }
+
+.fabric-tag-text {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-amber);
+  opacity: 0.85;
+}
+.fabric-tag-text .punct {
+  color: rgba(212, 162, 76, 0.4);
+  margin: 0 0.5em;
 }
 
 /* ── Suit Spec / Blueprint ── */
@@ -2799,7 +2857,7 @@ a {
 }
 
 .footer-inner {
-  max-width: 880px;
+  max-width: 1100px;
   margin-inline: auto;
   container-type: inline-size;
   container-name: footer;
@@ -3265,15 +3323,8 @@ a {
     gap: 0rem;
   }
 
-  .about-photo {
-    flex: 0 0 auto;
-    width: 100%;
-  }
-
-  .about-photo-placeholder {
-    width: 100%;
-    max-width: 320px;
-    height: 480px;
+  .fabric-piece {
+    width: 240px;
   }
 
   /* ── Desktop rail nav: hidden on mobile, replaced by mobile-nav-bar ── */
