@@ -8,7 +8,8 @@ type AtelierIconProps = {
 };
 
 // Color: inherits from parent via `currentColor`. Set `color: var(--color-amber)` on the wrapper.
-// Size: default 16px. Production sizes: 12 (work card), 13 (phase tag), 14 (thread junction).
+// Size: default 16px. Production sizes: 12 (work card), 13 (phase tag), 16 (thread junction).
+// Stroke width: 0.85 kit default; needle shaft overrides to 1.4, needle thread to 0.6.
 // IMPORTANT: supplemental shapes here must stay in sync with buildIconSVGInnerHTML in paths.ts.
 export function AtelierIcon({ name, size = 16, className, style }: AtelierIconProps) {
   const sharedStroke = {
@@ -19,8 +20,9 @@ export function AtelierIcon({ name, size = 16, className, style }: AtelierIconPr
     strokeLinejoin: "round" as const,
   };
 
-  // Node uses dashed strokes for stitched-edge metaphor; all others use solid strokes
+  // Per-icon path-render overrides
   const isStitched = name === 'node';
+  const isNeedle = name === 'needle';
 
   return (
     <svg
@@ -35,11 +37,10 @@ export function AtelierIcon({ name, size = 16, className, style }: AtelierIconPr
       <path
         d={ICON_PATHS[name]}
         strokeDasharray={isStitched ? "1.5 2.5" : undefined}
-        fill={name === 'needle' ? "currentColor" : "none"}
-        stroke={name === 'needle' ? "none" : "currentColor"}
+        strokeWidth={isNeedle ? 1.4 : undefined}
       />
 
-      {/* Shears — Phase 0 V5: two finger-loops at top + center pivot dot */}
+      {/* Shears — V5: finger-loops + center pivot dot */}
       {name === 'shears' && (
         <>
           <circle cx="5" cy="5" r="2.4" {...sharedStroke} />
@@ -48,9 +49,19 @@ export function AtelierIcon({ name, size = 16, className, style }: AtelierIconPr
         </>
       )}
 
-      {/* Needle — filled silhouette; eye uses --color-bg stroke (dark-bg contexts only) */}
+      {/* Needle — V3: oval eye + dashed thread anchor */}
       {name === 'needle' && (
-        <circle cx="11" cy="6.5" r="1.2" stroke="var(--color-bg)" fill="none" strokeWidth={0.85} />
+        <>
+          <ellipse cx="11" cy="5" rx="1.5" ry="2" fill="none" stroke="currentColor" strokeWidth={0.85} />
+          <path
+            d="M 11 3 Q 6 3 5 7"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={0.6}
+            strokeLinecap="round"
+            strokeDasharray="1 1.5"
+          />
+        </>
       )}
 
       {/* Node — pin-mark nodes (filled, not stroked rings) */}
@@ -62,7 +73,7 @@ export function AtelierIcon({ name, size = 16, className, style }: AtelierIconPr
         </>
       )}
 
-      {/* Grading — Phase 0 V3: filled middle row in 3-row spec sheet */}
+      {/* Grading — V3: filled middle row in 3-row spec sheet */}
       {name === 'grading' && (
         <rect x={5} y={9} width={12} height={5} fill="currentColor" stroke="none" />
       )}

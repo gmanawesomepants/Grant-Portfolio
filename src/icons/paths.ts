@@ -20,9 +20,11 @@ export const ICON_PATHS = {
   // Path = blade Vs only; loops + pivot dot rendered as supplemental shapes
   shears:  "M 7.4 6 L 11 11 L 5 19 M 14.6 6 L 11 11 L 17 19",
 
-  // Needle — FIT phase (variant B locked: elongated ~1:8 ratio, slight right asymmetry)
-  // Path = needle body silhouette; eye rendered as supplemental hollow circle
-  needle:  "M 11 1.5 L 12.2 8 L 11 21 L 9.9 8 Z",
+  // Needle — FIT phase (Phase 0 V3 locked: thicker shaft + thread anchor)
+  // Path = vertical shaft only; oval eye + dashed thread rendered as supplemental shapes
+  // The thread curving from the eye is the semantic anchor that makes this read as
+  // a needle (vs. a pin, sliver, or hairline) at small sizes.
+  needle:  "M 11 6 L 11 19",
 
   // Bobbin — DELIVER phase
   // Spool flanges + walls + thread crossings
@@ -32,15 +34,14 @@ export const ICON_PATHS = {
   // The systems half — placed on work-card categories only
 
   // Node — AI Orchestration (dasharray "1.5 2.5" stitched edges)
-  // Stitched triangle. Stitch lines stop 2px short of each pin node.
-  // Pin-mark nodes rendered as supplemental filled circles.
+  // Stitched triangle. Pin-mark nodes rendered as supplemental filled circles.
   node:    "M 11 7 L 5 15 M 11 7 L 17 15 M 7 17 L 15 17",
 
   // Grid — Full-Stack (draftsman grid, horizontal corner ticks)
   // 2×2 grid with small tick marks at outer corners (drafting-paper vocabulary)
   grid:    "M 4 4 L 18 4 L 18 18 L 4 18 Z M 11 4 L 11 18 M 4 11 L 18 11 M 3 4 L 5 4 M 17 4 L 19 4 M 3 18 L 5 18 M 17 18 L 19 18",
 
-  // Grading — AI Systems (renamed from `target`, Phase 0 V3 locked)
+  // Grading — AI Systems (Phase 0 V3 locked, renamed from `target`)
   // 3-row spec sheet with filled middle row = master grade among size variants
   // Path = box + dividers; filled middle row rendered as supplemental rect.
   grading: "M 5 4 L 17 4 L 17 18 L 5 18 Z M 5 9 L 17 9 M 5 14 L 17 14",
@@ -72,20 +73,23 @@ export function buildIconSVGInnerHTML(name: IconName): string {
         <circle cx="11" cy="11" r="0.7" fill="currentColor" stroke="none" />`;
 
     case 'needle':
-      // Filled silhouette; eye punches through with --color-bg stroke (dark-bg contexts only)
-      return `<path d="${ICON_PATHS[name]}" fill="currentColor" stroke="none" />
-        <circle cx="11" cy="6.5" r="1.2" stroke="var(--color-bg)" fill="none" stroke-width="${sw}" />`;
+      // V3 locked: thicker shaft (1.4px) + oval eye + dashed thread anchor
+      // Path renders the shaft with stroke-width 1.4 (overrides parent's 0.85).
+      // Eye is stroke-only oval (works on any background).
+      // Thread is a small curved dashed path emerging from the eye — semantic anchor.
+      return `<path d="${ICON_PATHS[name]}" stroke="currentColor" fill="none" stroke-width="1.4" stroke-linecap="round" />
+        <ellipse cx="11" cy="5" rx="1.5" ry="2" fill="none" stroke="currentColor" stroke-width="${sw}" />
+        <path d="M 11 3 Q 6 3 5 7" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-dasharray="1 1.5" />`;
 
     case 'node':
       // Stitched dashed edges + pin-mark nodes (filled circles, not stroked rings)
-      // Parent SVG provides stroke/fill/strokeWidth; only dasharray is node-specific
       return `<path d="${ICON_PATHS[name]}" stroke-dasharray="1.5 2.5" />
         <circle cx="11" cy="5" r="1.4" fill="currentColor" stroke="none" />
         <circle cx="5" cy="17" r="1.4" fill="currentColor" stroke="none" />
         <circle cx="17" cy="17" r="1.4" fill="currentColor" stroke="none" />`;
 
     case 'grading':
-      // Phase 0 V3: filled middle row inside the 3-row spec sheet
+      // V3 locked: filled middle row inside the 3-row spec sheet
       return `${path}
         <rect x="5" y="9" width="12" height="5" fill="currentColor" stroke="none" />`;
 
