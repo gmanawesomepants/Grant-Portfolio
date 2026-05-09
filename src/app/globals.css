@@ -3300,6 +3300,12 @@ a {
 
   .fabric-piece {
     width: 240px;
+    align-self: center;
+  }
+
+  /* Tag protrudes 90px below figure layout box; section needs extra room */
+  .about-section {
+    padding-bottom: 8rem;
   }
 
   /* ── Desktop rail nav: hidden on mobile, replaced by mobile-nav-bar ── */
