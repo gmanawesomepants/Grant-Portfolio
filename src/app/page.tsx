@@ -858,6 +858,16 @@ export default function Home() {
               L 0 0.24 L 0.04 0.22 L 0 0.20 L 0.04 0.18 L 0 0.16 L 0.04 0.14
               L 0 0.12 L 0.04 0.10 L 0 0.08 L 0.04 0.06 L 0 0.04 Z
           " />
+          {/* Soft amber glow around the pin-mark */}
+          <filter id="pinGlow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur" />
+            <feFlood floodColor="#D4A24C" floodOpacity="0.4" result="color" />
+            <feComposite in="color" in2="blur" operator="in" result="glow" />
+            <feMerge>
+              <feMergeNode in="glow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
       </svg>
 
@@ -1145,9 +1155,19 @@ export default function Home() {
                   strokeLinejoin="miter"
                 />
               </g>
+              {/* Pin: SVG coords so position is reliable regardless of CSS rotation.
+                  cx=38.4 = 12% of 320px. cy=-2 sits above the top edge (overflow:visible). */}
+              <circle
+                cx="38.4"
+                cy="-2"
+                r="3.5"
+                fill="var(--color-amber)"
+                fillOpacity="0.9"
+                filter="url(#pinGlow)"
+                aria-hidden="true"
+              />
             </svg>
             <span className="fabric-pin-thread" aria-hidden="true" />
-            <span className="fabric-pin" aria-hidden="true" />
             <figcaption className="fabric-tag">
               <span className="fabric-tag-text">
                 Grant Mahn<span className="punct">&middot;</span>Systems Tailor

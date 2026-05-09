@@ -1809,7 +1809,6 @@ a {
   margin: 0;
   transform: rotate(5deg);
   transform-origin: center center;
-  padding-bottom: 72px;
 }
 
 .fabric-photo {
@@ -1817,20 +1816,6 @@ a {
   height: 100%;
   display: block;
   overflow: visible;
-}
-
-.fabric-pin {
-  position: absolute;
-  top: -3px;
-  left: 12%;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--color-amber);
-  opacity: 0.9;
-  box-shadow: 0 0 8px rgba(212, 162, 76, 0.4);
-  z-index: 3;
-  pointer-events: none;
 }
 
 .fabric-pin-thread {
@@ -1846,7 +1831,7 @@ a {
 
 .fabric-tag {
   position: absolute;
-  bottom: 18px;
+  bottom: -72px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(15, 10, 6, 0.85);
