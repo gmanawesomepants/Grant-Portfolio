@@ -1116,15 +1116,25 @@ export default function Home() {
             >
               <g transform="scale(320, 400)">
                 <g clipPath="url(#fabricEdge)">
+                  {/*
+                    Empty state — solid dark fill matching site bg.
+                    Silhouette shape is defined by the amber outline below.
+
+                    WHEN THE REAL PHOTO LANDS:
+                    1. Place file at /public/images/about/grant-portrait.jpg
+                    2. Add <image> AFTER the <rect> (rect stays as backstop):
+
+                       <rect x="0" y="0" width="1" height="1" fill="#0e0a06" />
+                       <image
+                         href="/images/about/grant-portrait.jpg"
+                         x="0" y="0" width="1" height="1"
+                         preserveAspectRatio="xMidYMid slice"
+                       />
+
+                    Do NOT add <image> before the file exists — browsers render
+                    fallback content for missing paths, which corrupts the silhouette.
+                  */}
                   <rect x="0" y="0" width="1" height="1" fill="#0e0a06" />
-                  <image
-                    href="/images/about/grant-portrait.jpg"
-                    x="0"
-                    y="0"
-                    width="1"
-                    height="1"
-                    preserveAspectRatio="xMidYMid slice"
-                  />
                 </g>
                 <use
                   href="#fabricEdgeStroke"
