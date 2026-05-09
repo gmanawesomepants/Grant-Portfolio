@@ -1155,6 +1155,15 @@ export default function Home() {
                   strokeLinejoin="miter"
                 />
               </g>
+              {/* Thread: SVG line so it terminates exactly at the pin's cy=-2.
+                  A CSS span can't reach above y=0 of the figure without overshooting the pin. */}
+              <line
+                x1="38.4" y1="-50"
+                x2="38.4" y2="-2"
+                stroke="var(--color-amber)"
+                strokeOpacity="0.35"
+                strokeWidth="1"
+              />
               {/* Pin: SVG coords so position is reliable regardless of CSS rotation.
                   cx=38.4 = 12% of 320px. cy=-2 sits above the top edge (overflow:visible). */}
               <circle
@@ -1167,7 +1176,6 @@ export default function Home() {
                 aria-hidden="true"
               />
             </svg>
-            <span className="fabric-pin-thread" aria-hidden="true" />
             <figcaption className="fabric-tag">
               <span className="fabric-tag-text">
                 Grant Mahn<span className="punct">&middot;</span>Systems Tailor

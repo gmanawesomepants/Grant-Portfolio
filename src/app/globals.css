@@ -1818,16 +1818,6 @@ a {
   overflow: visible;
 }
 
-.fabric-pin-thread {
-  position: absolute;
-  top: -40px;
-  left: calc(12% + 3px);
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(to bottom, transparent, rgba(212, 162, 76, 0.35));
-  z-index: 2;
-  pointer-events: none;
-}
 
 .fabric-tag {
   position: absolute;
