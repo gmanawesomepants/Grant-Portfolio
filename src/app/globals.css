@@ -3296,11 +3296,18 @@ a {
   .about-layout {
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 0rem;
+    gap: 1.5rem;
+  }
+
+  /* flex-basis:480px sets WIDTH on desktop (row flex) but HEIGHT on mobile
+     (column flex), inflating the text block and creating a fake gap below
+     the text. Reset to auto so the block hugs its content height. */
+  .about-text {
+    flex: 0 0 auto;
   }
 
   .fabric-piece {
-    width: 240px;
+    width: 280px;
     align-self: center;
   }
 
@@ -3623,7 +3630,7 @@ a {
 
 @media (max-width: 480px) {
   .fabric-piece {
-    width: 200px;
+    width: 240px;
   }
 }
 
