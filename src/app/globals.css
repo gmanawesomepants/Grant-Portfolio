@@ -3295,6 +3295,7 @@ a {
 
   .about-layout {
     flex-direction: column;
+    flex-wrap: nowrap;
     gap: 0rem;
   }
 
@@ -3303,8 +3304,9 @@ a {
     align-self: center;
   }
 
-  /* Tag protrudes 90px below figure layout box; section needs extra room */
-  .about-section {
+  /* Tag protrudes 90px below figure layout box; section needs extra room.
+     Double-class selector (0,2,0) beats .section-wrapper padding shorthand (0,1,0). */
+  .section-wrapper.about-section {
     padding-bottom: 8rem;
   }
 
