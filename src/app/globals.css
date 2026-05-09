@@ -1831,7 +1831,7 @@ a {
 
 .fabric-tag {
   position: absolute;
-  bottom: -72px;
+  bottom: -90px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(15, 10, 6, 0.85);
