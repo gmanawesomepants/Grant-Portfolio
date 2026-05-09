@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "eval:fitting": "npx tsx scripts/eval-fitting.ts",
-    "eval:fitting:compare": "npx tsx scripts/eval-fitting.ts --compare"
+    "eval:fitting:compare": "npx tsx scripts/eval-fitting.ts --compare",
+    "generate-favicons": "node scripts/generate-favicons.mjs"
   },
   "dependencies": {
     "gsap": "^3.14.2",
@@ -23,6 +24,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "png-to-ico": "^3.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
