@@ -1106,15 +1106,29 @@ export default function Home() {
         <div className="about-layout fade-in" style={{ marginTop: "2rem" }}>
           <div className="about-text">
             <p>
-              Grant Mahn is an AI systems architect based in San Diego.
-              Self-taught. No degree. No bootcamp. He builds the systems that
-              make AI actually useful — not demos that die after a pitch, not
-              prototypes that never see production. Real infrastructure that
-              runs, learns, and scales. Every system on this page was designed,
-              architected, and deployed by one person.
+              I spent years tailoring suits before I ever wrote software.
+            </p>
+            <p>
+              Most people think tailoring is about clothes. It&apos;s really about
+              proportion, tension, structure, and fit. Small adjustments change the way
+              someone moves and the way they feel in their own skin.
+            </p>
+            <p>
+              That&apos;s how I learned to think about systems.
+            </p>
+            <p>
+              I taught myself to build AI the same way I learned tailoring: by doing the
+              work over and over until the seams held. No playbook. Just long nights,
+              real projects, and an obsession with the details that make a system fit.
+            </p>
+            <p>
+              Every system on this page was built end-to-end by me. The architecture,
+              the interfaces, the orchestration, the edge cases, the details most people
+              never see.
             </p>
             <h2 className="about-closer">
-              Former tailor. Same discipline, different material.
+              Former tailor.<br />
+              Same discipline. Different material.
             </h2>
           </div>
 
